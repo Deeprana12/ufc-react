@@ -1,55 +1,55 @@
 $(document).ready(function () {
 
-    $("#li2a").click(function(){
-        $("#li1").removeClass("active");
-        $("#li2").addClass("active");
-        $("#li3").removeClass("active");
-        $("#li5").removeClass("active");
-        $("#li4").removeClass("active");
-        $("#li6").removeClass("active");
+    $("#li2a").onClick(function(){
+        $("#li1").removeclassName("active");
+        $("#li2").addclassName("active");
+        $("#li3").removeclassName("active");
+        $("#li5").removeclassName("active");
+        $("#li4").removeclassName("active");
+        $("#li6").removeclassName("active");
     });
-    $("#li3a").click(function(){
-        $("#li1").removeClass("active");
-        $("#li2").removeClass("active");
-        $("#li3").addClass("active");
-        $("#li4").removeClass("active");
-        $("#li5").removeClass("active");
-        $("#li6").removeClass("active");
+    $("#li3a").onClick(function(){
+        $("#li1").removeclassName("active");
+        $("#li2").removeclassName("active");
+        $("#li3").addclassName("active");
+        $("#li4").removeclassName("active");
+        $("#li5").removeclassName("active");
+        $("#li6").removeclassName("active");
     });
-    $("#li1a").click(function(){
-        $("#li2").removeClass("active");
-        $("#li3").removeClass("active");
-        $("#li1").addClass("active");
-        $("#li5").removeClass("active");
-        $("#li4").removeClass("active");
-        $("#li6").removeClass("active");
+    $("#li1a").onClick(function(){
+        $("#li2").removeclassName("active");
+        $("#li3").removeclassName("active");
+        $("#li1").addclassName("active");
+        $("#li5").removeclassName("active");
+        $("#li4").removeclassName("active");
+        $("#li6").removeclassName("active");
     });
-    $("#li5a").click(function(){
-        $("#li2").removeClass("active");
-        $("#li3").removeClass("active");
-        $("#li5").addClass("active");
-        $("#li1").removeClass("active");
-        $("#li6").removeClass("active");
-        $("#li4").removeClass("active");
+    $("#li5a").onClick(function(){
+        $("#li2").removeclassName("active");
+        $("#li3").removeclassName("active");
+        $("#li5").addclassName("active");
+        $("#li1").removeclassName("active");
+        $("#li6").removeclassName("active");
+        $("#li4").removeclassName("active");
     });
-    $("#li4a").click(function(){
-        $("#li2").removeClass("active");
-        $("#li3").removeClass("active");
-        $("#li4").addClass("active");
-        $("#li1").removeClass("active");
-        $("#li5").removeClass("active");
-        $("#li6").removeClass("active");
+    $("#li4a").onClick(function(){
+        $("#li2").removeclassName("active");
+        $("#li3").removeclassName("active");
+        $("#li4").addclassName("active");
+        $("#li1").removeclassName("active");
+        $("#li5").removeclassName("active");
+        $("#li6").removeclassName("active");
     });
-    $("#li6a").click(function(){
-        $("#li2").removeClass("active");
-        $("#li3").removeClass("active");
-        $("#li6").addClass("active");
-        $("#li1").removeClass("active");
-        $("#li4").removeClass("active");
-        $("#li5").removeClass("active");
+    $("#li6a").onClick(function(){
+        $("#li2").removeclassName("active");
+        $("#li3").removeclassName("active");
+        $("#li6").addclassName("active");
+        $("#li1").removeclassName("active");
+        $("#li4").removeclassName("active");
+        $("#li5").removeclassName("active");
     });
 
-    $(".update1").click(function (){
+    $(".update1").onClick(function (){
         var userid = $(this).attr("data-id");
         // alert('h');
         $.ajax({
@@ -77,7 +77,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#done1").click(function(){
+    $("#done1").onClick(function(){
 
         var ufname = $('#u-fname').val();
         var ulname = $('#u-lname').val();
@@ -97,7 +97,7 @@ $(document).ready(function () {
         });
     });
 
-    $(".del").click(function(){
+    $(".del").onClick(function(){
         var del = $(this);
         var id = $(this).attr("data-id");
         // alert(id);
@@ -111,7 +111,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#cancel-btn").click(function (){
+    $("#cancel-btn").onClick(function (){
         $("#updatetable").modal('hide');
     })
     $('.datatable').DataTable();
@@ -187,7 +187,7 @@ function newr(i){
 
 }
 
-$(".updaterole1").click(function (){
+$(".updaterole1").onClick(function (){
     var roleid = $(this).attr("data-id");
     $.ajax({
 
@@ -238,7 +238,7 @@ $(".updaterole1").click(function (){
 
 });
 
-$("#savepermission").click(function(){
+$("#savepermission").onClick(function(){
 
     var rname = $('#rolename').val();
     var rinfo = $('#roleinfo').val();
@@ -263,7 +263,7 @@ $("#savepermission").click(function(){
     });
 });
 
-$(".del1").click(function(){
+$(".del1").onClick(function(){
     var del = $(this);
     var id = $(this).attr("data-id");
     $.ajax({
