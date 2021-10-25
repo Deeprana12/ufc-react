@@ -2,15 +2,23 @@ import React,{useState,useEffect,useRef} from 'react'
 import axios from 'axios';
 import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
+import ReactPaginate from 'react-paginate';
+import { useHistory } from 'react-router';
+import Cookies from 'universal-cookie';
 
 export const Active_user = () => {
 
-    const [data,setData] = useState([]);    
+    const [user,setUser] = useState([]);
+    const history = useHistory()
+    
+    if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
+        history.push('/');
+    }
+
     useEffect(() => {
-        axios.get('/userdata/getmember', {                    
-        }).then((res)=>{
-            console.log(res);
-            setData(res.data)
+        axios.get('/users/getmember', {                    
+        }).then((res)=>{        
+            setUser(res.data)
         }).catch((err) => {
             console.log(err);
         });                
@@ -21,7 +29,52 @@ export const Active_user = () => {
     const openModal = () => {
         modalRef.current.openModal()
     }
+    
     let i=0;
+    const [searchTerm, setsearchTerm] = useState('')
+    const [pageNumber, setpageNumber] = useState(0)
+    
+    const userPerPage = 5
+    const pagesVisited = pageNumber * userPerPage
+
+    const displayUsers = user.filter((user)=>{
+        if(searchTerm == "")
+            return user;
+        else if(user.studentIDEmployeeID.toLowerCase().includes(searchTerm.toLowerCase())){
+            return user;
+        }
+    }).slice(pagesVisited,pagesVisited + userPerPage)
+            .map((user)=>{
+                return(<>                                                 
+                    <tr>
+                        <td>{++i}</td>
+                        <td > {user.firstname} </td>
+                        <td > {user.middlename} </td>
+                        <td> {user.email}</td>
+                        <td> {user.studentIDEmployeeID}</td>
+                        <td> {user.nameofInstitute}</td>
+                        <td>{user.nameofDepartment}</td>
+                        <td>{user.mobileno}</td>
+                        <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
+                        data-target="#exampleModalScrollable" onClick={openModal}>View</button>
+                            <Modal ref={modalRef} forId={user._id} fname={user.firstname}
+                            lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
+                            nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
+                            city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
+                            dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
+                            rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1} membership={user.membership}>  
+                            </Modal>
+                        </td>
+                    </tr>
+                </>)
+            })        
+    
+    const pageCount = Math.ceil(user.length / userPerPage)
+
+    const changePage = ({selected}) => {
+        setpageNumber(selected) // no need to worry about this React Paginate will handle it
+    }
+
     return (
         <div>
         <div className="wrapper">
@@ -33,7 +86,7 @@ export const Active_user = () => {
                             <div class="iq-card">
                                 <div class="iq-card-header d-flex justify-content-between">
                                     <div class="iq-header-title">
-                                    <h4 class="card-title">User List</h4>
+                                    <p class="h3 card-title">List of members : </p>
                                     </div>
                                 </div>
                                 <div class="iq-card-body">
@@ -43,7 +96,9 @@ export const Active_user = () => {
                                             <div id="user_list_datatable_info" class="dataTables_filter">
                                                 <form class="mr-3 position-relative">
                                                 <div class="form-group mb-0">
-                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search" aria-controls="user-list-table"/>
+                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search...(ex.19ce001)" aria-controls="user-list-table"
+                                                        onChange={(e)=> {setsearchTerm(e.target.value)}}
+                                                    />
                                                 </div>
                                                 </form>
                                             </div>
@@ -78,32 +133,7 @@ export const Active_user = () => {
                                         </thead>
                                         <tbody>
 
-                                            {
-                                                    data.map((user)=>{
-                                                        return(<>                                                 
-                                                            <tr>
-                                                                <td>i++</td>
-                                                                <td > {user.firstname} </td>
-                                                                <td > {user.middlename} </td>
-                                                                <td> {user.email}</td>
-                                                                <td> {user.studentIDEmployeeID}</td>
-                                                                <td> {user.nameofInstitute}</td>
-                                                                <td>{user.nameofDepartment}</td>
-                                                                <td>{user.mobileno}</td>
-                                                                <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
-                                                                data-target="#exampleModalScrollable" onClick={openModal}>Click</button>
-                                                                    <Modal ref={modalRef} forId={user._id} fname={user.firstname}
-                                                                    lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
-                                                                    nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
-                                                                    city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
-                                                                    dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
-                                                                    rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1}>  
-                                                                    </Modal>
-                                                                </td>
-                                                            </tr>
-                                                        </>)
-                                                    })
-                                                }
+                                            { displayUsers }
                                                 {/* <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../Asserts/images/user/01.jpg" alt="profile"/></td>
                                                 <td>Anna Sthesia</td>
                                                 <td>(760) 756 7568</td>
@@ -127,6 +157,24 @@ export const Active_user = () => {
                                             <span>Showing 1 to 5 of 5 entries</span>
                                         </div>
                                         <div class="col-md-6">
+                                            <ReactPaginate className="pagenavigation"
+                                                previousLabel={"Previous"}
+                                                nextLabel={"Next"}
+                                                pageCount={pageCount}
+                                                onPageChange={changePage}   
+                                                containerClassName="pagination justify-content-end"
+                                                previousClassName="page-item"
+                                                nextLinkClassName="page-item"
+                                                previousLinkClassName="page-link"
+                                                nextLinkClassName="page-link"
+                                                // disabledClassName="page-link"
+                                                activeLinkClassName="page-link"
+                                                activeClassName="page-item active"                                                
+                                                pageClassName="page-item"
+                                                pageLinkClassName="page-link"
+                                            />
+                                        </div>
+                                        {/* <div class="col-md-6">
                                             <nav aria-label="Page navigation example">
                                                 <ul class="pagination justify-content-end mb-0">
                                                 <li class="page-item disabled">
@@ -140,7 +188,7 @@ export const Active_user = () => {
                                                 </li>
                                                 </ul>
                                             </nav>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>

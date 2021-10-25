@@ -1,13 +1,78 @@
 import React from 'react'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import axios from 'axios';
 import { useEffect,useState } from 'react';
 import {Navbar} from './Navbar'
+import Cookies from 'universal-cookie';
 
 export const Update_form = () => { 
 
+    const [selected, setSelected] = React.useState("");
+
+    const changeSelectOptionHandler = (event) => {
+        setSelected(event.target.value);
+    };
+
+    const Cspit = ["BTECH(CE)","BTECH(CL)","BTECH(CS)","BTECH(EC)","BTECH(EE)","BTECH(IT)","BTECH(ME)","DRCE","DRCL","DREC","DREE","DRME","MTECH(AMT)","MTECH(CE)","MTECH(CL)","MTECH(CSE)","MTECH(EC)","MTECH(EE)","MTECH(EVD)","MTECH(ICT)","MTECH(IT)","MTECH(ME)","MTECH(PE)","MTECH(TE)","MTM","PGDCS"];
+    const Depstar = ["BTECH(CE)","BTECH(CS)","BTECH(IT)","DRCE"];
+    const Rpcp = ["B.Pharm","CPCT","CPPAT","CPPT","CPPV","DRFPH","DRPC","DRPHC","DRPHCOG","DRPHCOL","DRPHT","M.PHARM(CT)","M.PHARM(DRA)","M.PHARM(CP)","M.PHARM(PT)","M.PHARM(QA)","MPHPCL","MPHPPP","MPHPQA","MPHRGA","MPHTCH","MPM","PGDCT","PGDPT"];
+    const Cmpica = ["B.Sc(IT)","BCA","DRMCA","M.Sc(IT)","MCA","MCAL","PGDCA"];
+    const I2im = ["BBA","DRLSC","DRMBA","MBA-CH","PGDM"];
+    const Pdpias = ["B.SC","BSC(CHEM)","BSCPHY","DRBC","DRBIO","DRCHEM","DRCSMCRI","DRMTH","DRNST","DRPHY","M.Phil","M.Sc(AOC)","M.Sc(BC)","M.Sc(BT)","M.Sc(MI)","M.Sc(MTH)","M.Sc(NST)","M.Sc(PHY)"];
+    const Arip = ["BPT","CCAPT","DRPT","MPT(CS)","MPT(MS)","MPT(NS)","MPT(PA)","MPT(RE)","MPT(SS)","MPT(WH)"];
+    const Mtin = ["BSC.Nursing","DNR","GNM","MNCH","MNMH","MNMS","MNOG","MNPN"];
+    const Cips = ["BMIT","BOP","BOTAT","BSMT","DRMLT","DROTAT","M.Sc.MIT","MSMLT","PGDCH","PGDHAT","PGDMLT"];
+
+    let type = null;
+
+    let options = null;
+
+    if (selected === "CSPIT") {
+        type = Cspit;
+    } else if (selected === "DEPSTAR") {
+        type = Depstar;
+    } else if (selected === "RPCP") {
+        type = Rpcp;
+    }else if (selected === "CMPICA"){
+        type = Cmpica;
+    }else if (selected === "I2IM"){
+        type = I2im;
+    }else if (selected === "PDPIAS"){
+        type = Pdpias;
+    }else if (selected === "ARIP"){
+        type = Arip;
+    }else if (selected === "MTIN"){
+        type = Mtin;
+    }else if (selected === "CIPS"){
+        type = Cips;
+    }
+
+    if (type) {
+        options = type.map((el) => <option key={el}>{el}</option>);
+    }
+
+    const [genderValue, genderInputProps] = useRadioButtons("gender");
+    function useRadioButtons(name) {
+        const [value, setValue] = useState("");
+
+        const handleChange = e => {
+            setValue(e.target.value);
+        };
+
+        const inputProps = {
+            name,
+            type: "radio",
+            onChange: handleChange
+        };
+
+        return [value, inputProps];
+    }    
+        
+    const history = useHistory()            
+
    const {id} = useParams();   
 
+//    clearing the form
    const [user,setUser] = useState({// *
       firstname : '',
       middlename: '',
@@ -28,46 +93,51 @@ export const Update_form = () => {
       telephone1: '',
       mobileNo1: '',
       email1: ''
-
-   });  
+   });
 
    let name,value;
-
+    // handling the values that are changed
    const handleinputs = (e) =>{
       name = e.target.name;
       value = e.target.value;
       setUser({...user,[name]:value})
-   }
+    }
+    
+    // for fetching data
+    useEffect(() => { 
 
-   //for fetching data
-   useEffect(() => { 
-      axios.get(`/userdata/getmember/${id}`, {                    
-      }).then((res)=>{
-         setUser({
-            name : res.data[0].name,
-            age : res.data[0].age,
-            _id : res.data[0]._id,
-            firstname  : res.data[0].firstname ,
-            middlename : res.data[0].middlename,
-            lastname : res.data[0].lastname,
-            nameofInstitute : res.data[0].nameofInstitute,
-            nameofDepartment : res.data[0].nameofDepartment,
-            studentIDEmployeeID : res.data[0].studentIDEmployeeID,
-            residentialAddress : res.data[0].residentalAddress,
-            city : res.data[0].city,
-            zip : res.data[0].zip,
-            telephone : res.data[0].telephone,
-            mobileno : res.data[0].mobileno,
-            email : res.data[0].email,
-            do : res.data[0].do,
-            gende : res.data[0].gende,
-            emergencyContactPerson : res.data[0].emergencyContactPerson,
-            relation : res.data[0].relation,
-            telephone1 : res.data[0].relephone1,
-            mobileNo1 : res.data[0].mobileNo1,
-            email : res.data[0].email1
-         })
-      }).catch((err) => {
+        if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
+            history.push('/');
+        }
+
+        axios.get(`/users/fetchmember/${id}`, {                    
+        }).then((res)=>{
+          console.log(res)          
+          console.log(res.data.firstname)           
+          setUser({    
+              _id : res.data._id,
+            firstname  : res.data.firstname ,
+            middlename : res.data.middlename,
+            lastname : res.data.lastname,
+            nameofInstitute : res.data.nameofInstitute,
+            nameofDepartment : res.data.nameofDepartment,
+            studentIDEmployeeID : res.data.studentIDEmployeeID,
+            residentialAddress : res.data.residentialAddress,
+            city : res.data.city,
+            zip : res.data.zip,
+            telephone : res.data.telephone,
+            mobileno : res.data.mobileno,
+            email : res.data.email,
+            dob : res.data.dob,
+            gender : res.data.gender,
+            emergencyContactPerson : res.data.emergencyContactPerson,
+            relation : res.data.relation,
+            telephone1 : res.data.telephone1,
+            mobileNo1 : res.data.mobileno1,
+            email1 : res.data.email1
+        })               
+    
+    }).catch((err) => {
          console.log(err);
       });                
    },[]);
@@ -77,16 +147,19 @@ export const Update_form = () => {
       e.preventDefault();
       const {firstname,middlename,lastname,nameofInstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;      // *
       console.log(firstname+" "+middlename+" "+lastname+" "+nameofInstitute+" "+nameofDepartment+" "+studentIDEmployeeID+" "+residentialAddress+" "+city+" "+zip+" "+telephone+" "+mobileno+" "+email+" "+dob+" "+gender+" "+emergencyContactPerson+" "+relation+" "+telephone1+" "+mobileNo1+" "+email1); //
-      // await axios.post(`/userdata/getmember/update/${id}`,{
-      //    name,age
-      // }).then((res)=>{
-      //       console.log(res);
-      //       alert('done');
-      // }).catch((err) => {
-      //    alert('err');
-      //       console.log(err);
-      // });
+      await axios.patch(`/users/updatemember/${id}`,{
+        firstname,middlename,lastname,nameofInstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1
+      }).then((res)=>{
+            console.log(res);
+            alert('done');
+      }).catch((err) => {
+            alert('err');
+            console.log(err);
+      });
    }
+
+   const radioValues = ["male,female"] 
+   const [radval, setRadval] = useState(user.gender)
 
     return (
       <>
@@ -96,10 +169,10 @@ export const Update_form = () => {
         <Navbar/>
          <div id="content-page" class="content-page">
                 <div class="container-fluid">
+                        <p className="h3 ml-3 mb-3">Update the information of <mark>{user.firstname}</mark> below :</p>
                     <div className="iq-card ">
-
                         <div className="iq-card-body ">
-                            <form novalidate="novalidate" action="#" className="needs-validation">
+                            <form noValidate="novalidate" action="#" onSubmit={submitForm} className="needs-validation">
                                 <div className="form-row">
                                     <div className="col-md-6 mb-3"><label for="validationCustom01">First name</label><input
                                         type="text" value={user.firstname}  id="firstname" name="firstname" required="required" onChange={handleinputs}  className="form-control" />
@@ -113,19 +186,33 @@ export const Update_form = () => {
                                         type="text" id="lastname" name="lastname" value={user.lastname} required="required" onChange={handleinputs}  className="form-control" />
                                         <div className="valid-feedback"> Looks good! </div>
                                     </div>
-                                    <div className="col-md-6 mb-3"><label for="nameofInstitute">Name of institute</label><select
-                                        id="nameofInstitute" name="nameofInstitute" value={user.nameofInstitute} required="required" onChange={handleinputs} className="form-control">
-                                        <option selected="selected" disabled="disabled" value="">Choose...</option>
-                                        <option>...</option>
-                                    </select>
+                                    <div className="col-md-6 mb-3"><label for="nameofInstitute">Name of institute</label>
+                                        <select
+                                            id="validationCustom04" required="required" className="form-control" onChange={changeSelectOptionHandler}>
+                                            <option selected="selected" disabled="disabled" value="">Choose...</option>
+                                            <option>CSPIT</option>
+                                            <option>DEPSTAR</option>
+                                            <option>RPCP</option>
+                                            <option>CMPICA</option>
+                                            <option>I2IM</option>
+                                            <option>PDPIAS</option>
+                                            <option>ARIP</option>
+                                            <option>MTIN</option>
+                                            <option>CIPS</option>
+
+                                        </select>
                                         <div className="invalid-feedback"> Please select a valid Name of institute.</div>
                                     </div>
-                                    <div className="col-md-6 mb-3"><label for="nameofDepartment">Name of department</label><select
-                                        id="nameofDepartment" name="nameofDepartment" value={user.nameofDepartment} required="required" onChange={handleinputs} className="form-control">
-                                        <option selected="selected" disabled="disabled" value="">Choose...</option>
-                                        <option>...</option>
-                                    </select>
-                                        <div className="invalid-feedback"> Please select a valid Name of department </div>
+
+                                    <div className="col-md-6 mb-3"><label for="nameofDepartment">Name of department</label>
+                                        <select
+                                            id="validationCustom05" required="required" className="form-control">
+                                            <option selected="selected" disabled="disabled" value="">Choose...</option>   
+                                            {
+                                                options
+                                            }
+                                        </select>
+                                            <div className="invalid-feedback"> Please select a valid Name of department </div>                                    
                                     </div>
 
                                     <div className="col-md-6 mb-3"><label for="studentIDEmployeeID">Student ID/Employee
@@ -141,6 +228,29 @@ export const Update_form = () => {
                                         id="city" required="required"  onChange={handleinputs} value={user.city} name="city" className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid city.</div>
                                     </div>
+
+                                    <div className="col-md-6 mb-3">
+                                            <label>Choose gender : </label>  
+                                                <div className="radio d-inline-block ml-2">
+                                                    <input
+                                                        value="female"
+                                                        checked={genderValue === "male"}
+                                                        {...genderInputProps}
+                                                    />
+                                                    <label>&nbsp;Male</label>
+                                                </div>                         
+
+                                                <div className="radio d-inline-block ml-2">
+                                                    <input
+                                                        value="female"
+                                                        checked={genderValue === "female"}
+                                                        {...genderInputProps}
+                                                    />
+                                                    <label>&nbsp;Female</label>
+                                                </div>                                            
+                                            <div className="invalid-feedback">Choose gender</div>
+                                    </div>
+
                                     <div className="col-md-6 mb-3"><label for="zip">Zip</label><input type="text"
                                         id="zip" name="zip" required="required" onChange={handleinputs}  value={user.zip} className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid zip.</div>
@@ -165,32 +275,7 @@ export const Update_form = () => {
                                             </div>
                                         </div>
                                     </div>
-
-                                {/* remaining */}
-                                    <div className="col-md-6 mb-3">
-                                        <div className="iq-card-body">                                    
-                                            <div role="group" className="form-group"><label for="exampleInputdate"
-                                                className="d-block"  >Gender: </label>                                    
-                                                <div className="radio d-inline-block mr-2">
-                                                    <fieldset>
-                                                        <label>
-                                                            <input type="radio" name="gender" value="Male" onChange={handleinputs} checked={FormData.gender=="Male"}/>
-                                                        </label>
-                                                    </fieldset>
-                                                    
-                                                </div>
-
-                                                <div className="radio d-inline-block mr-2">
-                                                <fieldset>
-                                                        <label>
-                                                            <input type="radio" name="gender" value="Female" onChange={handleinputs} checked={FormData.gender=="Female"}/>
-                                                        </label>
-                                                    </fieldset>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>                                
-                                    </div>
+                                    
                                     
                                     <div className="col-md-6 mb-3"><label for="emergencyContactPerson">Emergency Contact Person</label><input
                                         type="text" id="emergencyContactPerson" value={user.emergencyContactPerson} name="emergencyContactPerson" required="required"   onChange={handleinputs}  className="form-control" />

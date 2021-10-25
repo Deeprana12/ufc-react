@@ -1,45 +1,35 @@
-import React,{useState,useEffect,useRef} from 'react'
+import React,{useState,useEffect,useRef} from 'react';
 import axios from 'axios';
 import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
 
-export const Admin_panel = () => {
-
+export const Active_members = () => {
+    
     const history = useHistory()
     
-    if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
+    if(localStorage.getItem('user')!='done'){
         history.push('/');
     }
 
     const [user,setUser] = useState([]);    
     useEffect(() => {
-        axios.get('/users/getusers', {                    
+        axios.get('/users/getactivemembers', {                    
         }).then((res)=>{
-            console.log(res)
             setUser(res.data)
+            console.log(res)
         }).catch((err) => {
             console.log(err);
         });                
-    },[]); 
+    },[]);         
 
-    // Function for changing the value for user
+    const modalRef = useRef();
 
-    const changeThisRole = (role,id) => {        
-        axios.patch(`users/changeRole/${id}`,{role}).
-        then((res)=>{
-            if(res.data == 'done'){
-                alert('Role changed successfully')
-            }else{
-                alert('Something went wrong!!') 
-            }
-        }).catch((er)=>{
-            console.log(er)
-        })
+    const openModal = () => {
+        modalRef.current.openModal()
     }
     
-    // Handling pagination    
     let i=0;
     const [searchTerm, setsearchTerm] = useState('')
     const [pageNumber, setpageNumber] = useState(0)
@@ -50,36 +40,31 @@ export const Admin_panel = () => {
     const displayUsers = user.filter((user)=>{
         if(searchTerm == "")
             return user;
-        else if(user.email.toLowerCase().includes(searchTerm.toLowerCase())){
+        else if(user.studentIDEmployeeID.toLowerCase().includes(searchTerm.toLowerCase())){
             return user;
         }
     }).slice(pagesVisited,pagesVisited + userPerPage)
             .map((user)=>{
                 return(<>                                                 
                     <tr>
-                        <td>{++i}</td>                        
-                        <td> {user.email} </td> 
-                        <div class="form-group m-2">                            
-                            <select class="form-control p-50" id="exampleFormControlSelect1" onChange={(e)=>changeThisRole(e.target.value,user._id)}>
-                            {
-                                (user.role == 'ADMIN' ? (<><option selected="" disabled="">ADMIN</option>
-                                <option>MODARATOR</option>
-                                <option>CLIENT</option></>):null)                                
-
-                            }
-                            {
-                                (user.role == '' ? (<><option selected="" disabled="">MOD</option>
-                                <option>ADMIN</option>
-                            <option>CLIENT</option></>):null)
-                            }
-                            {
-                                (user.role == 'CLIENT' ? (<><option selected="" disabled="">CLIENT</option>
-                                <option>ADMIN</option>
-                                <option>MODARATOR</option></>):null)
-                            }   
-                            
-                            </select>
-                        </div>
+                        <td> {++i} </td>
+                        <td> {user.firstname} </td>
+                        <td> {user.middlename} </td>
+                        <td> {user.email} </td>
+                        <td> {user.studentIDEmployeeID} </td>
+                        <td> {user.nameofInstitute} </td>
+                        <td> {user.nameofDepartment} </td>
+                        <td> {user.mobileno} </td>
+                        <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
+                        data-target="#exampleModalScrollable" onClick={openModal}>View</button>
+                            <Modal ref={modalRef} forId={user._id} fname={user.firstname}
+                            lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
+                            nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
+                            city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
+                            dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
+                            rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1} membership={user.membership} >  
+                            </Modal>
+                        </td>
                     </tr>
                 </>)
             })        
@@ -111,7 +96,7 @@ export const Admin_panel = () => {
                                             <div id="user_list_datatable_info" class="dataTables_filter">
                                                 <form class="mr-3 position-relative">
                                                 <div class="form-group mb-0">
-                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search(ex.xyz@gmail.com)" aria-controls="user-list-table"
+                                                    <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search...(ex.19ce001)" aria-controls="user-list-table"
                                                         onChange={(e)=> {setsearchTerm(e.target.value)}}
                                                     />
                                                 </div>
@@ -132,16 +117,38 @@ export const Admin_panel = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <table id="table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
+                                    <table id="user-list-table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
                                         <thead>
-                                        <tr>
-                                            <th className="col-2">No</th>
-                                            <th className="col-7">Email</th>    
-                                            <th className="col-3">Role</th>       
-                                        </tr>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Email</th>
+                                                <th>Student ID</th>
+                                                <th>Institute</th>
+                                                <th>Department</th>
+                                                <th>Mobile No</th>
+                                                <th>Action</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                            { displayUsers }                                                
+
+                                            { displayUsers }
+                                                {/* <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../Asserts/images/user/01.jpg" alt="profile"/></td>
+                                                <td>Anna Sthesia</td>
+                                                <td>(760) 756 7568</td>
+                                                <td>annasthesia@gmail.com</td>
+                                                <td>USA</td>
+                                                <td><span class="badge iq-bg-primary">Active</span></td>
+                                                <td>Acme Corporation</td>
+                                                <td>2019/12/01</td>
+                                                <td>
+                                                <div class="flex align-items-center list-user-action">
+                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add" href="#"><i class="ri-user-add-line"></i></a>
+                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="#"><i class="ri-pencil-line"></i></a>
+                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line"></i></a>
+                                                </div>
+                                                </td> */}
                                         </tbody>
                                     </table>
                                     </div>
@@ -159,14 +166,13 @@ export const Admin_panel = () => {
                                                 previousClassName="page-item"
                                                 nextLinkClassName="page-item"
                                                 previousLinkClassName="page-link"
-                                                nextLinkClassName="page-link"
-                                                // disabledClassName="page-link"
+                                                nextLinkClassName="page-link"                                                
                                                 activeLinkClassName="page-link"
                                                 activeClassName="page-item active"                                                
                                                 pageClassName="page-item"
                                                 pageLinkClassName="page-link"
                                             />
-                                        </div>                                        
+                                        </div>                                    
                                     </div>
                                 </div>
                             </div>

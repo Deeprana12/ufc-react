@@ -1,15 +1,43 @@
-import React,{useState,forwardRef,useImperativeHandle, Component} from 'react'
+import React,{useState,forwardRef,useRef,useImperativeHandle, useEffect} from 'react'
 import ReactDom from 'react-dom';
 import  { useHistory } from 'react-router-dom'
-import { Update_form } from '../Update_form';
+import Modal_ID from '../Id_card'
+import axios from 'axios'
 
-const UpdateForm = forwardRef((props,ref) => {
+const UpdateForm = forwardRef((props,ref) => {  
+  let tempID,tempUser
+  if((localStorage.getItem('user')=='done')){
+    tempUser = localStorage.getItem('dataKey');
+    tempID = JSON.parse(tempUser).username
+  }
+  const [isAdmin, setIsAdmin] = useState()
+
+  useEffect(() => {       
+      axios.get(`/users/isAdmin/${tempID}`, {                    
+      }).then((res)=>{                  
+          setIsAdmin(res.data.role)
+          console.log(res.data.role)
+      }).catch((err) => {
+          console.log(err);
+      });     
+  }, [])
+  
   const history = useHistory();
-  const [display,setDisplay] = useState(false);
+  if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
+      history.push('/');
+  }
 
+  const modal2Ref = useRef();
+
+  const openModal2 = () => {
+      modal2Ref.current.openModal2()
+  }
+
+  const [display,setDisplay] = useState(false);
+  
   useImperativeHandle(ref,()=>{
     return{
-      openModal: () => open(),
+      openModal: async () => open(),
       close: () => close()
     }
   });  
@@ -18,6 +46,29 @@ const UpdateForm = forwardRef((props,ref) => {
     history.push(`/Update_form/${userID}`);
     // console.log(userID);
   }
+
+  const deleteThis = (userID) => {
+    if(window.confirm("Are you sure you want to delete this record permenently ?")){
+        axios.post(`/users/deletemember/${userID}`,{}).
+          then((res)=>{
+            if(res=='done'){
+              alert("Your record deleted successfully")
+            }else{alert('Something went wrong')}
+          })
+    }
+  }
+
+  const makethisUserVerify =  (userID) => {
+    if(window.confirm("Do you want to confirm the membership of this student ?") ){
+       axios.patch(`/users/confirmmembership/${userID}`,{}).
+        then((res)=>{
+          console.log(res)
+          if(res.data=='done'){
+            alert("Verified successfully")
+          }else{alert('Something went wrong')}
+        })
+    }
+  }  
 
   const open = () => {
     setDisplay(true);
@@ -29,7 +80,7 @@ const UpdateForm = forwardRef((props,ref) => {
 
   if(display){
       return ReactDom.createPortal(
-        <div class="modal fade show" id="exampleModalScrollable" tabIndex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style={{"padding-right": "8px", "display": "block"}}>
+        <div class="modal fade show" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style={{"padding-right": "8px", "display": "block"}}>
           <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -43,8 +94,8 @@ const UpdateForm = forwardRef((props,ref) => {
                   <table id="user-list-table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
                     <thead>
                         <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Information</th>                            
+                            <th className="col-4"></th>
+                            <th className="col-8">Information</th>                            
                         </tr>
                     </thead>
                     <tbody>                      
@@ -71,12 +122,25 @@ const UpdateForm = forwardRef((props,ref) => {
                   </table>
                 </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="modal-footer"> 
+                  
+                    {(isAdmin == 'ADMIN') ? (props.membership ===  "NotVerified" ? <p className="justify-content-left"><mark>If details are valid than click on Verify else Delete.</mark></p> :null ):null}
+                    {((isAdmin == 'ADMIN') )?(
+                      (props.membership ===  "NotVerified")? <button type="button" class="btn btn-primary" data-dismiss="modal"
+                      onClick={() => {makethisUserVerify(props.forId)}}>Verify</button> : <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button>):null
+                    }                                                            
+                    {(isAdmin == 'ADMIN') ? <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>:null}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" 
+                        data-target="#exampleModalCenteredScrollable"
+                    onClick={openModal2}>ID</button>
+
+                  <Modal_ID ref={modal2Ref} memberID={props.forId} membername={props.fname}
+                    memberaddress={props.add} membercontactNo={props.mob} memberlastname={props.lname}
+                  />
                 </div>
-              </div>
+              </div>                            
           </div>
         </div>  
       ,document.getElementById("modal-root"))

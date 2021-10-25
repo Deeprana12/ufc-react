@@ -1,8 +1,34 @@
-import React,{useRef,useEffect,useState,Link} from 'react'
-import {NavLink} from "react-router-dom";
+import React,{useState,useEffect} from 'react'
+import Cookies from 'universal-cookie';
+import {NavLink,useHistory} from "react-router-dom";
+import axios from 'axios'
 require("../Asserts/js/index");
 
 export const Navbar = () => {
+
+    const history = useHistory()
+    let tempID,tempUser
+    
+    if(localStorage.getItem('user')!='done'){
+        history.push('/signin');
+    }
+    
+
+    // console.log(cookies.get('user'))
+ 
+    const logitOut = () => {        
+        localStorage.setItem('user',null)
+        localStorage.setItem('dataKey',null)
+        history.push('/signin');
+        // e.preventDefault();
+        // axios.get("/auth/logout",{})
+        // .then((res)=>{
+        //     console.log(res)
+        //     history.push('/');
+        // }).catch((e)=>{
+        //     console.log(e);
+        // });            
+    }
    
     return (
       <>                 
@@ -28,15 +54,15 @@ export const Navbar = () => {
                         <li className="iq-menu-title"><i className="ri-subtract-line"></i><span>Dashboard</span></li>
                         <li className="nav-item active" id="li1">
                             <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="true" id="li1a" to="/dashboard"><i className="ri-home-4-line"></i><span>Dashboard</span></NavLink>
-                        </li>
+                        </li>                    
                         <li className="nav-item" id="li3" aria-expanded="true">
-                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Admin Panel</span></NavLink>
+                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
                         </li>
                         <li className="nav-item" id="li2">
-                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li2a" to="/active_user"><i className="ri-user-3-line"></i><span>Active User</span></NavLink>
+                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li2a" to="/active_members"><i className="ri-user-3-line"></i><span>Active Members</span></NavLink>
                         </li>
                         <li className="nav-item" id="li4">
-                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li4a" to="/m1"><i className="ri-home-8-line"></i><span>Module - 1</span></NavLink>
+                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
                         </li>
                         <li className="nav-item" id="li5">
                             <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li5a" to="/m2"><i className="ri-home-8-line"></i><span>Module - 2</span></NavLink>
@@ -44,9 +70,9 @@ export const Navbar = () => {
                     </ul>
                 </nav>
                 <div className="p-3"></div>
-                </div><div className="scrollbar-track scrollbar-track-x" style={{display: "none"}}><div className="scrollbar-thumb scrollbar-thumb-x" style={{width: "260px", transform: "translate3d(0px, 0px, 0px)"}}></div></div><div className="scrollbar-track scrollbar-track-y" style={{display: "none"}}><div className="scrollbar-thumb scrollbar-thumb-y" style={{height: "1555px", transform: "translate3d(0px, 0px, 0px)"}}></div></div></div>
-            </div>
-                    
+                </div><div className="scrollbar-track scrollbar-track-x" style={{display: "none"}}><div className="scrollbar-thumb scrollbar-thumb-x" style={{width: "260px", transform: "translate3d(0px, 0px, 0px)"}}></div></div>                
+                <div className="scrollbar-track scrollbar-track-y" style={{display: "none"}}><div className="scrollbar-thumb scrollbar-thumb-y" style={{height: "1555px", transform: "translate3d(0px, 0px, 0px)"}}></div></div></div>
+            </div>                    
                     <div className="iq-top-navbar">
                         <div className="iq-navbar-custom">
                         <div className="iq-sidebar-logo">
@@ -126,10 +152,8 @@ export const Navbar = () => {
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <div className="d-inline-block w-100 text-center p-3">
-                                                            <form action="../Database/loginPostMethod.php" method="post">
-                                                                <button className="bg-primary iq-sign-btn" name="logout" type="submit" role="button">Sign out<i className="ri-login-box-line ml-2"></i></button>
-                                                            </form>
+                                                        <div className="d-inline-block w-100 text-center p-3">                                                            
+                                                            <button className="bg-primary iq-sign-btn" name="logout" onClick={logitOut} type="submit" role="button">Sign out<i className="ri-login-box-line ml-2"></i></button>                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -137,7 +161,7 @@ export const Navbar = () => {
                                         </li>
                                     </ul>
                             </nav>                                
-            </div>
+                </div>
             </div>           
                        
       </>
