@@ -29,6 +29,12 @@ const Id_card = forwardRef((props,ref) => {
         content: () => componentRef.current,
     });
 
+    var styleToprint =`{
+        .full-modal hr{
+            width:"80%"
+        }
+    }`
+
     if(display){
         return ReactDom.createPortal(                  
             <div id="exampleModalCenteredScrollable" class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredScrollableTitle" aria-modal="true" style={{"padding-right": "8px", display: "block"}}>
@@ -51,7 +57,7 @@ const Id_card = forwardRef((props,ref) => {
                                 <div class="card">
                                     <div class="row no-gutters flex-row-reverse">
                                         <div class="col-md-5 pr-2">
-                                            <img src="../Asserts/images/page-img/09.jpg" class="card-img rounded-circle ml-3" style={{width:"50px",height:"50px"}} alt="#"/>
+                                            <img src="../Asserts/images/page-img/09.jpg" class="card-img rounded-circle ml-3" style={{width:"100%",height:"100%"}} alt="#"/>
                                         </div>
                                             <div class="col-md-7">
                                             <div className="table-responsive">                                      
@@ -138,7 +144,7 @@ class Example extends React.PureComponent {
               // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
               // to the root node of the returned component as it will be overwritten.
               return <a href="#">Print this out!</a>;
-            }}
+            }}        
             content={() => this.componentRef}
           />
           <ComponentToPrint ref={el => (this.componentRef = el)} />

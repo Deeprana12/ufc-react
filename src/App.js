@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import {Admin_panel} from './components/navbar_components/admin_panel';
 import {Dashboard} from './components/navbar_components/dashboard';
 import {Active_members} from './components/navbar_components/Active_members'
-import {Module2} from './components/navbar_components/module2'
+import {NotPayment} from './components/navbar_components/notPayment'
 import { Update_form } from './components/Update_form';
 import { Login } from './components/Auth/Login';
 import { Register } from './components/Auth/Register'
@@ -20,7 +20,7 @@ class App extends Component {
                 <Route exact path="/update_form/:id"><Update_form/></Route>
                 <Route exact path="/total_users"><Admin_panel/></Route>
                 <Route exact path="/active_members"><Active_members/></Route>
-                <Route exact path="/m2"><Module2/></Route>
+                <Route exact path="/paymentpending"><NotPayment/></Route>
             </>
         );
     }

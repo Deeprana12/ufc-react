@@ -1,7 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import Cookies from 'universal-cookie';
 import {NavLink,useHistory} from "react-router-dom";
-import axios from 'axios'
 require("../Asserts/js/index");
 
 export const Navbar = () => {
@@ -58,14 +56,14 @@ export const Navbar = () => {
                         <li className="nav-item" id="li3" aria-expanded="true">
                             <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
                         </li>
+                        <li className="nav-item" id="li5">
+                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-home-8-line"></i><span>Payment Remaining</span></NavLink>
+                        </li>
                         <li className="nav-item" id="li2">
                             <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li2a" to="/active_members"><i className="ri-user-3-line"></i><span>Active Members</span></NavLink>
-                        </li>
+                        </li> 
                         <li className="nav-item" id="li4">
                             <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
-                        </li>
-                        <li className="nav-item" id="li5">
-                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li5a" to="/m2"><i className="ri-home-8-line"></i><span>Module - 2</span></NavLink>
                         </li>
                     </ul>
                 </nav>
