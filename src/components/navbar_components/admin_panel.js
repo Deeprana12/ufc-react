@@ -3,8 +3,17 @@ import axios from 'axios';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
+import {RotateLoader} from 'react-spinners'
 
 export const Admin_panel = () => {
+
+    const [loading, setLoading] = useState(false)
+    
+    const override = ` 
+        top: 250px;
+        display: block;
+        margin: 0 auto;        
+    `;
 
     const history = useHistory()
     
@@ -16,6 +25,7 @@ export const Admin_panel = () => {
     useEffect(() => {
         axios.get('/users/getusers', {                    
         }).then((res)=>{
+            setLoading(true)
             console.log(res)
             setUser(res.data)
         }).catch((err) => {
@@ -97,6 +107,7 @@ export const Admin_panel = () => {
             <div class="container-fluid">
                     <div className="row">
                         <div className="col-sm-12">
+                        {loading ?
                             <div class="iq-card">
                                 <div class="iq-card-header d-flex justify-content-between">
                                     <div class="iq-header-title">
@@ -169,6 +180,7 @@ export const Admin_panel = () => {
                                     </div>
                                 </div>
                             </div>
+                        :<RotateLoader size={20} color='#9d7af3' css={override}  loading/>}
                         </div>
                     </div>                                            
                 </div>

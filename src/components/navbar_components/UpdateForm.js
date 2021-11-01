@@ -3,8 +3,18 @@ import ReactDom from 'react-dom';
 import  { useHistory } from 'react-router-dom'
 import Modal_ID from '../Id_card'
 import axios from 'axios'
+import {RotateLoader} from 'react-spinners'
 
-const UpdateForm = forwardRef((props,ref) => {  
+const UpdateForm = forwardRef((props,ref) => { 
+
+  const [loading, setLoading] = useState(false)
+    
+  const override = ` 
+      top: 250px;
+      display: block;
+      margin: 0 auto;        
+  `;
+
   let tempID,tempUser
   if((localStorage.getItem('user')=='done')){
     tempUser = localStorage.getItem('dataKey');
@@ -16,6 +26,7 @@ const UpdateForm = forwardRef((props,ref) => {
       axios.get(`/users/isAdmin/${tempID}`, {                    
       }).then((res)=>{                  
           setIsAdmin(res.data.role)
+          setLoading(true)
           console.log(res.data.role)
       }).catch((err) => {
           console.log(err);
@@ -81,6 +92,7 @@ const UpdateForm = forwardRef((props,ref) => {
   if(display){
       return ReactDom.createPortal(
         <div class="modal fade show" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style={{"padding-right": "8px", "display": "block"}}>
+        {loading ?
           <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -142,6 +154,7 @@ const UpdateForm = forwardRef((props,ref) => {
                 </div>
               </div>                            
           </div>
+          :<RotateLoader size={20} color='#9d7af3' css={override}  loading/>}
         </div>  
       ,document.getElementById("modal-root"))
   }

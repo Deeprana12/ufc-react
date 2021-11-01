@@ -4,8 +4,17 @@ import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
+import {RotateLoader} from 'react-spinners'
 
 export const Active_members = () => {
+
+    const [loading, setLoading] = useState(false)
+    
+    const override = ` 
+        top: 250px;
+        display: block;
+        margin: 0 auto;        
+    `;
     
     const history = useHistory()
     
@@ -18,6 +27,7 @@ export const Active_members = () => {
         axios.get('/users/getactivemembers', {                    
         }).then((res)=>{
             setUser(res.data)
+            setLoading(true)
             console.log(res)
         }).catch((err) => {
             console.log(err);
@@ -52,13 +62,13 @@ export const Active_members = () => {
                         <td> {user.middlename} </td>
                         <td> {user.email} </td>
                         <td> {user.studentIDEmployeeID} </td>
-                        <td> {user.nameofInstitute} </td>
+                        <td> {user.nameofinstitute} </td>
                         <td> {user.nameofDepartment} </td>
                         <td> {user.mobileno} </td>
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
                             <Modal ref={modalRef} forId={user._id} fname={user.firstname}
-                            lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
+                            lname={user.lastname} mname={user.middlename} noi={user.nameofinstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
                             dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
@@ -76,7 +86,7 @@ export const Active_members = () => {
     }
 
     return (
-        <div>
+        <div>        
         <div className="wrapper">
         <Navbar/>
         <div id="content-page" class="content-page">
@@ -89,6 +99,8 @@ export const Active_members = () => {
                                     <p class="h3 card-title">List of members : </p>
                                     </div>
                                 </div>
+
+                                {loading ?                                
                                 <div class="iq-card-body">
                                     <div class="table-responsive">
                                     <div class="row justify-content-between">
@@ -134,21 +146,7 @@ export const Active_members = () => {
                                         <tbody>
 
                                             { displayUsers }
-                                                {/* <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../Asserts/images/user/01.jpg" alt="profile"/></td>
-                                                <td>Anna Sthesia</td>
-                                                <td>(760) 756 7568</td>
-                                                <td>annasthesia@gmail.com</td>
-                                                <td>USA</td>
-                                                <td><span class="badge iq-bg-primary">Active</span></td>
-                                                <td>Acme Corporation</td>
-                                                <td>2019/12/01</td>
-                                                <td>
-                                                <div class="flex align-items-center list-user-action">
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add" href="#"><i class="ri-user-add-line"></i></a>
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="#"><i class="ri-pencil-line"></i></a>
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line"></i></a>
-                                                </div>
-                                                </td> */}
+                                                
                                         </tbody>
                                     </table>
                                     </div>
@@ -175,6 +173,7 @@ export const Active_members = () => {
                                         </div>                                    
                                     </div>
                                 </div>
+                            :<RotateLoader size={20} color='#9d7af3' css={override}  loading/>}         
                             </div>
                         </div>
                     </div>                                            

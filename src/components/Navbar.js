@@ -5,28 +5,39 @@ require("../Asserts/js/index");
 export const Navbar = () => {
 
     const history = useHistory()
-    let tempID,tempUser
-    
+        
     if(localStorage.getItem('user')!='done'){
         history.push('/signin');
-    }
-    
-
-    // console.log(cookies.get('user'))
+    }        
  
     const logitOut = () => {        
         localStorage.setItem('user',null)
         localStorage.setItem('dataKey',null)
-        history.push('/signin');
-        // e.preventDefault();
-        // axios.get("/auth/logout",{})
-        // .then((res)=>{
-        //     console.log(res)
-        //     history.push('/');
-        // }).catch((e)=>{
-        //     console.log(e);
-        // });            
+        history.push('/signin');                  
     }
+
+    const makecolored  = (id) =>{
+        alert(document.getElementById(id).classList)        
+        var ele = document.getElementById(id);        
+        var ele2 = document.getElementById('li2')
+        (ele2.classList.remove('active'))
+        (document.getElementById('li3').classList.remove('active'))
+        (document.getElementById('li4').classList.remove('active'))
+        (document.getElementById('li5').classList.remove('active'))
+        ele.classList.add('active')
+    }
+
+    // const toggleClass = (e) => {
+    //     alert(e.target.classList)
+        // let classes = 'nav-item';
+        // let els = document.getElementsByClassName('nav-item active');        
+        // if(els){
+        //     while (els[0]) {
+        //         els[0].classList.remove('active')
+        //     }
+        // }
+        // e.target.className = classes.replace('nav-item','nav-item active');
+    // }
    
     return (
       <>                 
@@ -50,20 +61,20 @@ export const Navbar = () => {
                 <nav className="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" className="iq-menu nav nav-tabs nav-fill">
                         <li className="iq-menu-title"><i className="ri-subtract-line"></i><span>Dashboard</span></li>
-                        <li className="nav-item active" id="li1">
-                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="true" id="li1a" to="/dashboard"><i className="ri-home-4-line"></i><span>Dashboard</span></NavLink>
+                        <li className="nav-item active" id="li1"  onClick={()=>makecolored('li1')}>
+                            <NavLink data-toggle="tab" aria-selected="true" id="li1a" to="/dashboard"><i className="ri-home-4-line"></i><span>Dashboard</span></NavLink>
                         </li>                    
-                        <li className="nav-item" id="li3" aria-expanded="true">
-                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
-                        </li>
-                        <li className="nav-item" id="li5">
-                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-home-8-line"></i><span>Payment Remaining</span></NavLink>
-                        </li>
-                        <li className="nav-item" id="li2">
-                            <NavLink  className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li2a" to="/active_members"><i className="ri-user-3-line"></i><span>Active Members</span></NavLink>
+                        <li className="nav-item" id="li2" onClick={()=>makecolored('li2')}>
+                            <NavLink  data-toggle="tab" aria-selected="false" id="li2a" to="/active_members"><i className="ri-user-3-line"></i><span>Active Members</span></NavLink>
                         </li> 
-                        <li className="nav-item" id="li4">
-                            <NavLink className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
+                        <li className="nav-item" id="li4" onClick={()=>makecolored('li4')}>
+                            <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
+                        </li>
+                        <li className="nav-item" id="li3" aria-expanded="true" onClick={()=>makecolored('li3')}>
+                            <NavLink  data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
+                        </li>
+                        <li className="nav-item" id="li5" onClick={()=>makecolored('li5')}>
+                            <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-home-8-line"></i><span>Payment Remaining</span></NavLink>
                         </li>
                     </ul>
                 </nav>

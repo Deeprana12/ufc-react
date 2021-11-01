@@ -4,8 +4,18 @@ import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
+import {RotateLoader} from 'react-spinners'
 
 export const NotPayment = () => {
+    
+    const [loading, setLoading] = useState(false)
+    
+    const override = ` 
+        top: 250px;
+        display: block;
+        margin: 0 auto;        
+    `;
+
     const history = useHistory()
     
     if(localStorage.getItem('user')!='done'){
@@ -16,6 +26,7 @@ export const NotPayment = () => {
     useEffect(() => {
         axios.get('/users/paymentnotdone', {                    
         }).then((res)=>{
+            setLoading(true)
             setUser(res.data) 
             console.log(res)
         }).catch((err) => {
@@ -24,6 +35,7 @@ export const NotPayment = () => {
     },[]);         
 
     const modalRef = useRef();
+
 
     const openModal = () => {
         modalRef.current.openModal()
@@ -88,6 +100,7 @@ export const NotPayment = () => {
                                     <p class="h3 card-title">List of members : </p>
                                     </div>
                                 </div>
+                            {loading ?
                                 <div class="iq-card-body">
                                     <div class="table-responsive">
                                     <div class="row justify-content-between">
@@ -131,23 +144,7 @@ export const NotPayment = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                             { displayUsers }
-                                                {/* <td class="text-center"><img class="rounded-circle img-fluid avatar-40" src="../Asserts/images/user/01.jpg" alt="profile"/></td>
-                                                <td>Anna Sthesia</td>
-                                                <td>(760) 756 7568</td>
-                                                <td>annasthesia@gmail.com</td>
-                                                <td>USA</td>
-                                                <td><span class="badge iq-bg-primary">Active</span></td>
-                                                <td>Acme Corporation</td>
-                                                <td>2019/12/01</td>
-                                                <td>
-                                                <div class="flex align-items-center list-user-action">
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add" href="#"><i class="ri-user-add-line"></i></a>
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="#"><i class="ri-pencil-line"></i></a>
-                                                    <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#"><i class="ri-delete-bin-line"></i></a>
-                                                </div>
-                                                </td> */}
                                         </tbody>
                                     </table>
                                     </div>
@@ -174,12 +171,13 @@ export const NotPayment = () => {
                                         </div>                                    
                                     </div>
                                 </div>
+                            :<RotateLoader size={20} color='#9d7af3' css={override} position='top-right' loading/>}         
                             </div>
                         </div>
                     </div>                                            
                 </div>
             </div>    
-            </div>            
+            </div>   
         </div>
     )
 }

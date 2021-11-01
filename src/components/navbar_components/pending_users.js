@@ -4,9 +4,17 @@ import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
-import Cookies from 'universal-cookie';
+import {RotateLoader} from 'react-spinners'
 
 export const Pending_Users = () => {
+
+    const [loading, setLoading] = useState(false)
+    
+    const override = ` 
+        top: 250px;
+        display: block;
+        margin: 0 auto;        
+    `;
 
     const [user,setUser] = useState([]);
     const history = useHistory()    
@@ -18,6 +26,7 @@ export const Pending_Users = () => {
     useEffect(() => {
         axios.get('/users/getpendingmembers', {                    
         }).then((res)=>{        
+            setLoading(true)
             setUser(res.data)
         }).catch((err) => {
             console.log(err);
@@ -84,16 +93,17 @@ export const Pending_Users = () => {
         <Navbar/>
         <div id="content-page" class="content-page">
             <div class="container-fluid">
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div class="iq-card">
-                                <div class="iq-card-header d-flex justify-content-between">
-                                    <div class="iq-header-title">
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div class="iq-card">
+                            <div class="iq-card-header d-flex justify-content-between">
+                                <div class="iq-header-title">
                                     <p class="h3 card-title">List of members : </p>
-                                    </div>
                                 </div>
-                                <div class="iq-card-body">
-                                    <div class="table-responsive">
+                            </div>
+                            {loading ? 
+                            <div class="iq-card-body">
+                                <div class="table-responsive">
                                     <div class="row justify-content-between">
                                         <div class="col-sm-12 col-md-6">
                                             <div id="user_list_datatable_info" class="dataTables_filter">
@@ -194,6 +204,7 @@ export const Pending_Users = () => {
                                         </div> */}
                                     </div>
                                 </div>
+                            :<RotateLoader size={20} color='#9d7af3' css={override}  loading/>}
                             </div>
                         </div>
                     </div>                                            
