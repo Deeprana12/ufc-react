@@ -70,17 +70,19 @@ export const Update_form = () => {
       setUser({...user,[name]:value})
     }
     
+    const [fileInputState, setFileInputState] = useState('')
+    const [fetchImg, setFetchImg] = useState('')
+    
     // for fetching data
     useEffect(() => { 
-
+        
         if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
             history.push('/');
         }
         axios.get(`/users/fetchmember/${id}`, {                    
         }).then((res)=>{
           setLoading(true)
-          console.log(res)                            
-        //   console.log(res.data.dob.slice(0,10))
+          console.log(res)                                      
           setUser({    
               _id : res.data._id,
             firstname  : res.data.firstname ,
@@ -101,49 +103,67 @@ export const Update_form = () => {
             relation : res.data.relation,
             telephone1 : res.data.telephone1,
             mobileNo1 : res.data.mobileno1,
-            email1 : res.data.email1
+            email1 : res.data.email1,
+            pimg : res.data.pimg
         })
         setGender(res.data.gender);            
         setInstitute(res.data.nameofinstitute)
-        setDepartment(res.data.nameofDepartment)        
+        setDepartment(res.data.nameofDepartment)         
+        setFetchImg(res.data.pimg)
     }).catch((err) => {
-         console.log(err);
-      });                
-   },[]);
-   
+        console.log(err);
+    });                
+},[]);
+    
+    const [previewSource, setPreviewSource] = useState('')
 
-   //for storing data
-   const submitForm = async (e) =>{
-      e.preventDefault();
-      const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;      // *
-      console.log(firstname+" "+middlename+" "+lastname+" "+institute+" "+department+" "+studentIDEmployeeID+" "+residentialAddress+" "+city+" "+zip+" "+telephone+" "+mobileno+" "+email+" "+dob+" "+gender+" "+emergencyContactPerson+" "+relation+" "+telephone1+" "+mobileNo1+" "+email1); //
-      await axios.patch(`/users/updatemember/${id}`,{
-        firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1
-      }).then((res)=>{
-            console.log(res);
-            alert('done');
-      }).catch((err) => {
-            alert('err');
-            console.log(err);
-      });
+    const handleFileInputChange = (e) =>{
+        const file = e.target.files[0]
+        previewFile(file)
+    }
+
+    const previewFile = (file) =>{
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () =>{
+            setPreviewSource(reader.result)
+        }
+    }
+    const [base64Image, setbase64Image] = useState('')
+
+    const uploadImage = async (base64EncodedImage) => {
+        setbase64Image(base64EncodedImage)
+    }
+
+    //for storing data
+    const submitForm = async (e) =>{            
+        e.preventDefault();        
+        uploadImage(previewSource) 
+        alert(base64Image)
+        const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;
+        await axios.patch(`/users/updatemember/${id}`,{
+            firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
+        }).then((res)=>{
+                console.log(res);
+                alert('done');
+        }).catch((err) => {
+                alert('err');
+                console.log(err); 
+        });
    }
 
-   const radioValues = ["male,female"] 
-   const [radval, setRadval] = useState(user.gender)
-
     return (
-      <>
-         {/* onChange={handleinputs} */}
+      <>         
          <div>
          <div className="wrapper">
         <Navbar/>
          <div id="content-page" class="content-page">
                 <div class="container-fluid">
-                        <p className="h3 ml-3 mb-3">Update the information of <mark>{user.firstname}</mark> below :</p>
+                    <p className="h3 ml-3 mb-3">Update the information of <mark>{user.firstname}</mark> below :</p>
                     <div className="iq-card ">
                     {loading ?
                         <div className="iq-card-body ">
-                            <form noValidate="novalidate" action="#" onSubmit={submitForm} className="needs-validation">
+                            <form noValidate="novalidate" onSubmit={submitForm} className="needs-validation" enctype="multipart/form-data ">
                                 <div className="form-row">
                                     <div className="col-md-6 mb-3"><label for="validationCustom01">First name</label><input
                                         type="text" value={user.firstname}  id="firstname" name="firstname" required="required" onChange={handleinputs}  className="form-control" />
@@ -266,7 +286,7 @@ export const Update_form = () => {
                                                         value="male"
                                                         type="radio"
                                                         name="gender"
-                                                        checked={gender === "male"}                                              onChange={(e) => {setGender(e.target.value)}}
+                                                        checked={gender === "male"} onChange={(e) => {setGender(e.target.value)}}
                                                     />
                                                     <label>&nbsp;Male</label>
                                                 </div>                         
@@ -276,12 +296,13 @@ export const Update_form = () => {
                                                         value="female"
                                                         checked={gender === "female"}
                                                         name="gender"
-                                                        type="radio"                                        onChange={(e) => {setGender(e.target.value)}}
+                                                        type="radio" onChange={(e) => {setGender(e.target.value)}}
                                                     />
                                                     <label>&nbsp;Female</label>
                                                 </div>                                            
                                             <div className="invalid-feedback">Choose gender</div>
                                     </div>
+
 
                                     <div className="col-md-6 mb-3"><label for="zip">Zip</label><input type="text"
                                         id="zip" name="zip" required="required" onChange={handleinputs}  value={user.zip} className="form-control" />
@@ -291,10 +312,13 @@ export const Update_form = () => {
                                         type="text" id="telephone" name="telephone"  value={user.telephone} required="required" onChange={handleinputs} className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid Telephone(STD No) </div>
                                     </div>
+
                                     <div className="col-md-6 mb-3"><label for="mobileno">Mobile</label><input type="text"
                                         id="mobileno" name="mobileno" required="required" onChange={handleinputs} value={user.mobileno} className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid Mobile </div>
                                     </div>
+
+
                                     <div className="col-md-6 mb-3"><label for="email">Email</label><input type="text"
                                         id="email" required="required"  onChange={handleinputs} name="email" value={user.email} className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid Email address.</div>
@@ -332,7 +356,36 @@ export const Update_form = () => {
                                         <div className="invalid-feedback"> Please provide a valid Email address.</div>
                                     </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleFormControlFile1">Upload Image</label>
+                                        <input type="file" class="form-control-file" id="pimg" name="pimg" 
+                                        // value={fileInputState}
+                                        onChange={handleFileInputChange}
+                                    />
+
+                                    {fetchImg ?(
+                                        <>
+                                            <div style={{"margin-top":"20px"}}>
+                                            <h5>Current profile image</h5>
+                                            <img src={fetchImg} alt="chosen"
+                                            style={{height:"200px",margin:"5px"}}/>
+                                            </div>
+                                        </>
+                                    ):null}
+
                                     
+                                    {previewSource && (
+                                        <>
+                                            <div style={{"margin-top":"20px"}}>
+                                            <h5>New Profile Image</h5>
+                                            <img src={previewSource} alt="chosen"
+                                            style={{height:"200px",margin:"5px"}}/>
+                                            </div>
+                                        </>
+                                    )}
+                                    </div>    
+
                                     {/* <div className="form-group">
                                         <div className="form-check"><input type="checkbox" value="" id="invalidCheck"
                                             required="required" className="form-check-input" /><label for="invalidCheck"

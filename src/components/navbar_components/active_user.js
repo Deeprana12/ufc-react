@@ -4,7 +4,6 @@ import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
 import { useHistory } from 'react-router';
-import Cookies from 'universal-cookie';
 
 export const Active_user = () => {
 
@@ -15,10 +14,10 @@ export const Active_user = () => {
         history.push('/');
     }
 
-    useEffect(() => {
+    useEffect(() => {        
         axios.get('/users/getmember', {                    
         }).then((res)=>{        
-            setUser(res.data)
+            setUser(res.data)            
         }).catch((err) => {
             console.log(err);
         });                
@@ -36,7 +35,7 @@ export const Active_user = () => {
     
     const userPerPage = 5
     const pagesVisited = pageNumber * userPerPage
-
+    
     const displayUsers = user.filter((user)=>{
         if(searchTerm == "")
             return user;
@@ -47,22 +46,23 @@ export const Active_user = () => {
             .map((user)=>{
                 return(<>                                                 
                     <tr>
-                        <td>{++i}</td>
-                        <td > {user.firstname} </td>
-                        <td > {user.middlename} </td>
-                        <td> {user.email}</td>
-                        <td> {user.studentIDEmployeeID}</td>
-                        <td> {user.nameofInstitute}</td>
-                        <td>{user.nameofDepartment}</td>
-                        <td>{user.mobileno}</td>
+                        <td> {++i} </td>
+                        {/* <td> {user.firstname} </td>
+                        <td> {user.middlename} </td>
+                        <td> {user.email} </td> */}
+                        <td> {user.studentIDEmployeeID} </td>
+                        <td> {user.nameofInstitute} </td>
+                        <td> {user.nameofDepartment} </td>
+                        <td> {user.mobileno1} </td>
+                        <td> {user.telephone1} </td>
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
-                            <Modal ref={modalRef} forId={user._id} fname={user.firstname}
+                            <Modal ref={modalRef} whichTab='active' forId={user._id} fname={user.firstname}
                             lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
                             dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
-                            rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1} membership={user.membership}>  
+                            rele={user.telephone1} mob1={user.mobileno1} email1={user.email1} membership={user.membership}>  
                             </Modal>
                         </td>
                     </tr>

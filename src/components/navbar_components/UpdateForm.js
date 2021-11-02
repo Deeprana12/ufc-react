@@ -5,8 +5,9 @@ import Modal_ID from '../Id_card'
 import axios from 'axios'
 import {RotateLoader} from 'react-spinners'
 
-const UpdateForm = forwardRef((props,ref) => { 
+const Modal = forwardRef((props,ref) => { 
 
+  // alert(props.for)
   const [loading, setLoading] = useState(false)
     
   const override = ` 
@@ -22,7 +23,8 @@ const UpdateForm = forwardRef((props,ref) => {
   }
   const [isAdmin, setIsAdmin] = useState()
 
-  useEffect(() => {       
+  useEffect(() => {  
+      console.log(props);     
       axios.get(`/users/isAdmin/${tempID}`, {                    
       }).then((res)=>{                  
           setIsAdmin(res.data.role)
@@ -111,7 +113,7 @@ const UpdateForm = forwardRef((props,ref) => {
                         </tr>
                     </thead>
                     <tbody>                      
-                      <tr><td>First Name :</td> <td>{props.fname}</td></tr>
+                      <tr><td>First Name :</td> <td>{props.forId}</td></tr>
                       <tr><td>Middle Name:</td> <td>{props.mname}</td></tr>
                       <tr><td>Last Name:</td> <td>{props.lname}</td></tr>
                       <tr><td>Name of Institute:</td> <td>{props.noi}</td></tr>
@@ -134,10 +136,19 @@ const UpdateForm = forwardRef((props,ref) => {
                   </table>
                 </div>
                 </div>
-                <div class="modal-footer"> 
-                  
+                <div class="modal-footer">                    
+                    {/* {
+                      ((props.whichTab=='payment')?<button type="button" class="btn btn-danger" data-dismiss="modal" id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>
+                      :null)
+                    }        */}
+                    <h1>{props.whichTab}</h1>
+                    {/*
+                    {
+                      (props.tab=='active')?(<><button type="button" class="btn btn-secondary" data-dismiss="modal" id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button><button type="button" class="btn btn-danger" data-dismiss="modal" id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenteredScrollable" onClick={openModal2}>ID</button></>)
+                      :null
+                    } */}
                     {(isAdmin == 'ADMIN') ? (props.membership ===  "NotVerified" ? <p className="justify-content-left"><mark>If details are valid than click on Verify else Delete.</mark></p> :null ):null}
-                    {((isAdmin == 'ADMIN') )?(
+                    {(isAdmin == 'ADMIN')?(
                       (props.membership ===  "NotVerified")? <button type="button" class="btn btn-primary" data-dismiss="modal"
                       onClick={() => {makethisUserVerify(props.forId)}}>Verify</button> : <button type="button" class="btn btn-secondary" data-dismiss="modal"
                     id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button>):null
@@ -161,4 +172,4 @@ const UpdateForm = forwardRef((props,ref) => {
   return null;
 });
 
-export default UpdateForm;
+export default Modal;

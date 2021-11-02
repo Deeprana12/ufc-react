@@ -68,7 +68,7 @@ export const NotPayment = () => {
                         <td> {user.mobileno} </td>
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
-                            <Modal ref={modalRef} forId={user._id} fname={user.firstname}
+                            <Modal ref={modalRef} whichTab='payment' forId={user._id} fname={user.firstname}
                             lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
