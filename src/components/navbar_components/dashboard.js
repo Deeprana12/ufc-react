@@ -9,7 +9,7 @@ export const Dashboard = () => {
 
     const [loading, setLoading] = useState(false)
     
-    const notify = (msg) =>  toast(msg, {
+    const notifySuccess = (msg) =>  toast.success(msg, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -38,31 +38,28 @@ export const Dashboard = () => {
             history.push('/');
             notifyError("You are not Authorized for this page!!")
         }else{
-            notify("🦄 Welcome Admin!!")
+            notifySuccess("Welcome Admin!!")
         }
         axios.get('/users/getuserscount', {                    
         }).then((res)=>{
-            setLoading(true)
-            //console.log(res)
+            setLoading(true)            
             setUsers(res.data)
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
         }); 
         
         axios.get('/users/getmemberscount', {                    
-        }).then((res)=>{
-            //console.log(res)
+        }).then((res)=>{            
             setMembers(res.data)
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
 
         axios.get('/users/getmemberscountpending', {                    
-        }).then((res)=>{
-            //console.log(res)
+        }).then((res)=>{            
             setpendingMember(res.data)
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
         
     }, [])
@@ -71,10 +68,7 @@ export const Dashboard = () => {
         top: 350px;
         display: block;
         margin: 0 auto;        
-    `;
-    // if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
-    //     history.push('/signin');
-    // } else {
+    `;    
         return (
             <>            
                 {/*<!-- Dashboard --> */}
@@ -84,7 +78,7 @@ export const Dashboard = () => {
                 <Navbar/>
                     <div id="content-page" className="content-page">
                         <div className="container-fluid">
-                            <div className="row">                                                                                     
+                            <div className="row">                     
                                 <div className="col-sm-6 col-md-6 col-lg-4"> 
                                     <div className="iq-card iq-card-block iq-card-stretch iq-card-height-half" id="tbookings">
                                         <a href="#users" className="iq-waves-effect nav-link" data-toggle="tab" aria-selected="false" id="li2a"><div className="iq-card-body">
@@ -119,7 +113,7 @@ export const Dashboard = () => {
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>                                                                                            
+                                    </div>                        
                                 </div>
     
                                 <div className="col-sm-6 col-md-6 col-lg-4">

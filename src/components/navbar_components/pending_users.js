@@ -59,17 +59,17 @@ export const Pending_Users = () => {
                 return(<>                                                 
                     <tr> 
                         <td>{++i}</td>
-                        {/* <td > {user.firstname} </td>
+                        <td > {user.firstname} </td>
                         <td > {user.middlename} </td>
                         <td> {user.email}</td>
                         <td> {user.studentIDEmployeeID}</td>
-                        <td> {user.nameofInstitute}</td>
+                        <td> {user.nameofinstitute}</td>
                         <td>{user.nameofDepartment}</td> 
-                        <td>{user.mobileno}</td> */}
+                        <td>{user.mobileno}</td>
                         {/* Passing the all member details from this page to modal */}
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
-                            <Modal ref={modalRef} tab={'pendingusers'} forId={user._id} fname={user.firstname}
+                            <Modal ref={modalRef} paymentstatus={user.paymentstatus} forId={user._id} fname={user.firstname}
                             lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}

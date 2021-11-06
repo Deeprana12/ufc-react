@@ -1,29 +1,14 @@
 import axios from 'axios';
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import  { useHistory } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'universal-cookie';
+import { useLocation } from 'react-router';
 
 export const Login = () => {
+
     
-    const history = useHistory();
-    // const cookies = new Cookies()
-    // if((cookies.get('user').passport.user)){
-    //     history.push('/dashboard')
-    // }
-
-    const redirect = () => {
-        history.push('/register');
-    }
-
-    // email & password
-    const [email,setEmail] = useState("");
-    const [password,setPassword] = useState("");
-
-    const [allEntry, setAllEntry] = useState([]);
-
-    const notify = (msg) =>  toast.error(msg, {
+    const notifySuccess = (msg) =>  toast.success(msg, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -32,26 +17,67 @@ export const Login = () => {
         draggable: true,
         progress: undefined,
     });
-
-    // sending req to back-end for verifying user
-    const checkLogin = (e) =>{
-        e.preventDefault();
-        const newEntry = {email:email,password:password}
-        setAllEntry([...allEntry,newEntry]);         
-        axios.post("/auth/login",{            
-            email,password 
-        }).then((res)=>{   
-            if(res.data.msg == 'done'){      
+    
+    const notifyError = (msg) =>  toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+    
+    const location = useLocation();
+    useEffect(() => {        
+        if(location.state != undefined){            
+            if(location.state.status){
+                notifySuccess(location.state.msg);
+            }else{
+                notifyError(location.state.msg);
+            }                    
+        }
+    }, [])
+    
+    const history = useHistory();
+    // const cookies = new Cookies()
+    // if((cookies.get('user').passport.user)){
+        //     history.push('/dashboard')
+        // }
+        
+        const redirect = () => {
+            history.push('/register');
+        }
+        
+        // email & password
+        const [email,setEmail] = useState("");
+        const [password,setPassword] = useState("");
+        
+        const [allEntry, setAllEntry] = useState([]);
+        
+        // sending req to back-end for verifying user
+        const checkLogin = (e) =>{
+            e.preventDefault();
+            const newEntry = {email:email,password:password}
+            setAllEntry([...allEntry,newEntry]);         
+            axios.post("/auth/login",{            
+                email,password 
+            }).then((res)=>{   
+                console.log(res);
+                if(res.data.msg == 'done'){      
                 // console.log('here')          
                 var allData = {
                     'user' : res.data.msg,
-                    'username' : res.data.userData
+                    'username' : res.data.userData,
+                    'role':res.data.role,
+                    'firstname' : res.data.fname,
+                    'lastname':res.data.lname 
                 }
                 localStorage.setItem('dataKey', JSON.stringify(allData));
                 localStorage.setItem('user', res.data.msg);
                 history.push('/dashboard');
             }
-            else notify("Login failed")
+            else notifyError("Login failed")
         }).catch((e)=>{
             console.log(e);
         });

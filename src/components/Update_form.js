@@ -74,15 +74,13 @@ export const Update_form = () => {
     const [fetchImg, setFetchImg] = useState('')
     
     // for fetching data
-    useEffect(() => { 
-        
+    useEffect(() => {         
         if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
             history.push('/');
         }
         axios.get(`/users/fetchmember/${id}`, {                    
         }).then((res)=>{
-          setLoading(true)
-          console.log(res)                                      
+          setLoading(true)                                                
           setUser({    
               _id : res.data._id,
             firstname  : res.data.firstname ,
@@ -129,6 +127,7 @@ export const Update_form = () => {
             setPreviewSource(reader.result)
         }
     }
+    
     const [base64Image, setbase64Image] = useState('')
 
     const uploadImage = async (base64EncodedImage) => {
@@ -139,17 +138,28 @@ export const Update_form = () => {
     const submitForm = async (e) =>{            
         e.preventDefault();        
         uploadImage(previewSource) 
-        alert(base64Image)
         const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;
-        await axios.patch(`/users/updatemember/${id}`,{
-            firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
-        }).then((res)=>{
-                console.log(res);
-                alert('done');
-        }).catch((err) => {
-                alert('err');
-                console.log(err); 
-        });
+        if(base64Image==null){
+            await axios.patch(`/users/updatemember/${id}`,{
+                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1
+            }).then((res)=>{
+                    console.log(res);
+                    alert('done');
+            }).catch((err) => { 
+                    alert('err');
+                    console.log(err); 
+            });
+        }else{
+            await axios.patch(`/users/updatemember/${id}`,{
+                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
+            }).then((res)=>{
+                    console.log(res);
+                    alert('done');
+            }).catch((err) => {
+                    alert('err');
+                    console.log(err); 
+            });            
+        }
    }
 
     return (
@@ -270,10 +280,12 @@ export const Update_form = () => {
                                             className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid Student ID/Employee ID </div>
                                     </div>
+
                                     <div className="col-md-6 mb-3"><label for="residentialAddress">Residental Address</label>
-                                    <textarea value={user.residentialAddress} className="form-control" onChange={handleinputs}></textarea>
+                                        <textarea value={user.residentialAddress} className="form-control" name="residentialAddress" onChange={handleinputs}></textarea>
                                         <div className="invalid-feedback"> Please enter a message in the textarea.</div>
                                     </div>
+
                                     <div className="col-md-6 mb-3"><label for="city">City</label><input type="text"
                                         id="city" required="required"  onChange={handleinputs} value={user.city} name="city" className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid city.</div>
@@ -348,7 +360,7 @@ export const Update_form = () => {
                                         <div className="invalid-feedback"> Please provide a valid Telephone(STD No) </div>
                                     </div>
                                     <div className="col-md-6 mb-3"><label for="mobileNo1">Mobile</label><input type="text"
-                                        id="mobileNo1" required="required" onChange={handleinputs} value={user.mobileNo1} className="form-control" />
+                                        id="mobileNo1" required="required" name="mobileNo1" onChange={handleinputs} value={user.mobileNo1} className="form-control" />
                                         <div className="invalid-feedback"> Please provide a valid Mobile </div>
                                     </div>
                                     <div className="col-md-6 mb-3"><label for="email1">Email</label><input type="text"
@@ -365,7 +377,7 @@ export const Update_form = () => {
                                     />
 
                                     {fetchImg ?(
-                                        <>
+                                        <>                                          
                                             <div style={{"margin-top":"20px"}}>
                                             <h5>Current profile image</h5>
                                             <img src={fetchImg} alt="chosen"
@@ -385,17 +397,6 @@ export const Update_form = () => {
                                         </>
                                     )}
                                     </div>    
-
-                                    {/* <div className="form-group">
-                                        <div className="form-check"><input type="checkbox" value="" id="invalidCheck"
-                                            required="required" className="form-check-input" /><label for="invalidCheck"
-                                                className="form-check-label"> I hereby
-                                                declare that the information given above is correct and that i will abide by the
-                                                rules and
-                                                regulations of the fitness center notified to me from time to time.</label>
-                                            <div className="invalid-feedback"> You must agree before submitting.</div>
-                                        </div>
-                                    </div> */}
                                     <button type="submit" className="btn btn-primary">Update</button>
                             </form>
                         </div>

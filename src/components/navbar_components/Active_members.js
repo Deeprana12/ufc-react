@@ -15,7 +15,11 @@ export const Active_members = () => {
         display: block;
         margin: 0 auto;        
     `;
-    
+
+    const addmanually = () => {
+        
+    }
+     
     const history = useHistory()
     
     if(localStorage.getItem('user')!='done'){
@@ -28,9 +32,9 @@ export const Active_members = () => {
         }).then((res)=>{
             setUser(res.data)
             setLoading(true)
-            console.log(res)
+            // console.log(res)
         }).catch((err) => {
-            console.log(err);
+            console.log(err); 
         });                
     },[]);         
 
@@ -67,12 +71,12 @@ export const Active_members = () => {
                         <td> {user.mobileno} </td>
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
-                            <Modal ref={modalRef} forId={user._id} fname={user.firstname}
+                            <Modal ref={modalRef} paymentstatus={user.paymentstatus} forId={user._id} fname={user.firstname}
                             lname={user.lastname} mname={user.middlename} noi={user.nameofinstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
                             dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
-                            rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1} membership={user.membership} >  
+                            rele={user.telephone1} mob1={user.mobileno1} email1={user.email1} membership={user.membership} >  
                             </Modal>
                         </td>
                     </tr>
@@ -117,15 +121,9 @@ export const Active_members = () => {
                                         </div>
                                         <div class="col-sm-12 col-md-6">
                                             <div class="user-list-files d-flex float-right">
-                                                <a class="iq-bg-primary" href="javascript:void();">
-                                                Print
-                                                </a>
-                                                <a class="iq-bg-primary" href="javascript:void();">
-                                                Excel
-                                                </a>
-                                                <a class="iq-bg-primary" href="javascript:void();">
-                                                Pdf
-                                                </a>
+                                                <button class="btn btn-outline-primary" onClick={()=>addmanually}>
+                                                ADD MEMBER
+                                                </button>                                                
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {NavLink,useHistory} from "react-router-dom";
+import clsx from 'clsx'
+import { useLocation } from 'react-router-dom'
 require("../Asserts/js/index");
 
 export const Navbar = () => {
@@ -9,11 +11,34 @@ export const Navbar = () => {
     if(localStorage.getItem('user')!='done'){
         history.push('/signin');
     }        
- 
+
+    const [isAdmin, setIsAdmin] = useState(false)
+
+    // if(localStorage.getItem('role')!='ADMIN'){
+    //     setIsAdmin('ADMIN')
+    // } 
+    const [first, setFirst] = useState('')
+    const [last, setLast] = useState('')
+    const [role, setRole] = useState('')
+    const location = useLocation();
+
+    useEffect(() => {
+        if(localStorage.getItem('role')=='ADMIN'){
+            setIsAdmin(true)
+        }         
+        let obj = (localStorage.getItem('dataKey'))
+        let i2 = JSON.parse(obj)
+        console.log(i2)       
+        setFirst(i2.firstname)
+        setLast(i2.lastname)
+        setRole(i2.role)
+        console.log(location.pathname);
+    }, [])
+
     const logitOut = () => {        
         localStorage.setItem('user',null)
         localStorage.setItem('dataKey',null)
-        history.push('/signin');                  
+        history.push('/');                  
     }   
    
     return (
@@ -38,21 +63,28 @@ export const Navbar = () => {
                 <nav className="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" className="iq-menu nav nav-tabs nav-fill">
                         <li className="iq-menu-title"><i className="ri-subtract-line"></i><span>Dashboard</span></li>
-                        <li className="nav-item active" id="li1">
+                        <li className={clsx({'nav-item' : true, 'active': location.pathname === '/dashboard' })} id="li1">
                             <NavLink data-toggle="tab" aria-selected="true" id="li1a" to="/dashboard"><i className="ri-home-4-line"></i><span>Dashboard</span></NavLink>
                         </li>
-                        <li className="nav-item" id="li3">
+                        
+                        <li className={clsx({'nav-item' : true,'active': location.pathname === '/admin'})} id="li3">
                             <NavLink  data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
                         </li>
-                        <li className="nav-item" id="li5">
+
+                        <li className={clsx({'nav-item' : true,'active': location.pathname === '/paymentpending'})} id="li5">
                             <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-home-8-line"></i><span>Payment Remaining</span></NavLink>
                         </li>
-                        <li className="nav-item" id="li2">
+
+                        <li className={clsx({'nav-item' : true,'active': location.pathname === '/active_members'})} id="li2">
                             <NavLink  data-toggle="tab" aria-selected="false" id="li2a" to="/active_members"><i className="ri-user-3-line"></i><span>Active Members</span></NavLink>
                         </li> 
-                        <li className="nav-item" id="li4">
-                            <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
-                        </li>
+                        
+                        {
+                            ((!isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
+                                <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
+                            </li>:null)
+                        }
+                        
                     </ul>
                 </nav>
                 <div className="p-3"></div>
@@ -83,61 +115,17 @@ export const Navbar = () => {
                                             <a Link="#" className="search-toggle iq-waves-effect d-flex align-items-center bg-primary rounded">
                                                 <img src="../Asserts/images/user/1.jpg" className="img-fluid rounded mr-3" alt="user"/>
                                                 <div className="caption">
-                                                    <h6 className="mb-0 line-height text-white">Mr.admin </h6>
-                                                    <span className="font-size-12 text-white">Available</span>
+                                                    <h6 className="mb-0 line-height text-white">{first} </h6>   
+                                                    <span className="font-size-12 text-white">{role}</span>
                                                 </div>
                                             </a>
                                             <div className="iq-sub-dropdown iq-user-dropdown">
                                                 <div className="iq-card shadow-none m-0">
                                                     <div className="iq-card-body p-0 ">
                                                         <div className="bg-primary p-3">
-                                                            <h5 className="mb-0 text-white line-height">Hello Mr.admin </h5>
-                                                            <span className="text-white font-size-12">Available</span>
-                                                        </div>
-                                                        <a Link="profile.php" className="iq-sub-card iq-bg-primary-hover">
-                                                            <div className="media align-items-center">
-                                                                <div className="rounded iq-card-icon iq-bg-primary">
-                                                                    <i className="ri-file-user-line"></i>
-                                                                </div>
-                                                                <div className="media-body ml-3">
-                                                                    <h6 className="mb-0 ">My Profile</h6>
-                                                                    <p className="mb-0 font-size-12">View personal profile details.</p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a Link="profile-edit.php" className="iq-sub-card iq-bg-primary-hover">
-                                                            <div className="media align-items-center">
-                                                                <div className="rounded iq-card-icon iq-bg-primary">
-                                                                    <i className="ri-profile-line"></i>
-                                                                </div>
-                                                                <div className="media-body ml-3">
-                                                                    <h6 className="mb-0 ">Edit Profile</h6>
-                                                                    <p className="mb-0 font-size-12">Modify your personal details.</p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a Link="account-setting.php" className="iq-sub-card iq-bg-primary-hover">
-                                                            <div className="media align-items-center">
-                                                                <div className="rounded iq-card-icon iq-bg-primary">
-                                                                    <i className="ri-account-box-line"></i>
-                                                                </div>
-                                                                <div className="media-body ml-3">
-                                                                    <h6 className="mb-0 ">Account settings</h6>
-                                                                    <p className="mb-0 font-size-12">Manage your account parameters.</p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a Link="privacy-setting.php" className="iq-sub-card iq-bg-primary-hover">
-                                                            <div className="media align-items-center">
-                                                                <div className="rounded iq-card-icon iq-bg-primary">
-                                                                    <i className="ri-lock-line"></i>
-                                                                </div>
-                                                                <div className="media-body ml-3">
-                                                                    <h6 className="mb-0 ">Privacy Settings</h6>
-                                                                    <p className="mb-0 font-size-12">Control your privacy parameters.</p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
+                                                            <h5 className="mb-0 text-white line-height">Hello, {first} </h5>
+                                                            {/* <span className="text-white font-size-12">Available</span> */}
+                                                        </div>                                                        
                                                         <div className="d-inline-block w-100 text-center p-3">                                                            
                                                             <button className="bg-primary iq-sign-btn" name="logout" onClick={logitOut} type="submit" role="button">Sign out<i className="ri-login-box-line ml-2"></i></button>                                                            
                                                         </div>

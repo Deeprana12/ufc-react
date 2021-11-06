@@ -3,23 +3,18 @@ import  { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'universal-cookie';
-  
 
 export const Register = () => {
     
-    const history = useHistory();
-
-    // const cookies = new Cookies()
-    // if((cookies.get('user').passport.user)){
-    //     history.push('/dashboard')
-    // }
+    const history = useHistory();    
 
     const redirect = () => {
         history.push('/');
     }
 
     const [email,setEmail] = useState("");
+    const [fname,setFname] = useState("");
+    const [lname,setLname] = useState("");
     const [password,setPassword] = useState("");
     const [checkPass,setCheckPass] = useState("");
 
@@ -34,21 +29,38 @@ export const Register = () => {
         draggable: true,
         progress: undefined,
         });
+    
+    const notifyError = (msg) =>  toast.error(msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 
     const storeRegister = (e) =>{
         e.preventDefault();
-        const newEntry = {email:email,password:password,password1:checkPass}
+        const newEntry = {firstname:fname,lastname:lname,email:email,password:password,password1:checkPass}
         setAllEntry([...allEntry,newEntry]);                         
             axios.post("/auth/register",{            
-                email,password,checkPass
-            }).then((res)=>{
-                // console.log(res)
-                if(res.data.err ==true){
-                    history.push('/')
-                }else{
-                    // console.log(res.data.errors[0].msg)
-                    if(res.data.errors[0].msg)
-                        notify(res.data.errors[0].msg)                                    
+                fname,lname,email,password,checkPass
+            }).then((res)=>{                
+                if(res.data.err == false){
+                    // notify('Registed successfully!!')                    
+                    history.push({
+                        pathname:'/',
+                        state:{msg:'Registed successfully!!',
+                        status:true}                                                    
+                    })
+                }else{                                        
+                    // notifyError("Already Registered! Please try to Login")
+                    history.push({
+                        pathname:'/',                        
+                        state:{msg:'Already Registered! Please try to Login',
+                        status:false} 
+                    })
                 }
             }).catch((e)=>{
                 console.log(e);
@@ -64,7 +76,24 @@ export const Register = () => {
                         <p style={{"textAlign": "center", "fontSize": "35px", "color": "#0b0b0b"}}>Registration</p>
                         <form className="needs-validation" onSubmit={storeRegister} noValidate>
                             <div className="row g-2"> 
-                            <div className="col-md-12 mb-3 name">
+
+                                <div className="col-md-6 mb-3 name">
+                                    <label htmlFor="username" className="form-label">First Name</label>
+                                    <input type="text" className="form-control" name="firstname"  value={fname} onChange={(e) => setFname(e.target.value)} required/>
+                                    <div className="invalid-feedback">
+                                        Please enter a First Name!
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6 mb-3 name">
+                                    <label htmlFor="username" className="form-label">Last Name</label>
+                                    <input type="text" className="form-control" name="lastname"  value={lname} onChange={(e) => setLname(e.target.value)} required/>
+                                    <div className="invalid-feedback">
+                                        Please enter a Last Name!
+                                    </div>
+                                </div>
+
+                                <div className="col-md-12 mb-3 name">
                                     <label htmlFor="username" className="form-label">Email</label>
                                     <input type="email" className="form-control" name="email"  value={email} onChange={(e) => setEmail(e.target.value)} required/>
                                     <div className="invalid-feedback">

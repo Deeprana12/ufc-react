@@ -23,17 +23,24 @@ const Modal = forwardRef((props,ref) => {
   }
   const [isAdmin, setIsAdmin] = useState()
 
-  useEffect(() => {  
-      console.log(props);     
-      axios.get(`/users/isAdmin/${tempID}`, {                    
-      }).then((res)=>{                  
-          setIsAdmin(res.data.role)
-          setLoading(true)
-          console.log(res.data.role)
-      }).catch((err) => {
-          console.log(err);
-      });     
+  useEffect(() => {    
+      if(localStorage.getItem('role')!='ADMIN'){
+        setLoading(true)
+        setIsAdmin('ADMIN')
+      } 
   }, [])
+
+  // useEffect(() => {  
+  //     console.log(props);     
+  //     axios.get(`/users/isAdmin/${tempID}`, {                    
+  //     }).then((res)=>{                  
+  //         setIsAdmin(res.data.role)
+  //         setLoading(true)
+  //         console.log(res.data.role)
+  //     }).catch((err) => {
+  //         console.log(err);
+  //     });     
+  // }, [])
   
   const history = useHistory();
   if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
@@ -56,8 +63,7 @@ const Modal = forwardRef((props,ref) => {
   });  
 
   const redirect = (userID) => {
-    history.push(`/Update_form/${userID}`);
-    // console.log(userID);
+    history.push(`/Update_form/${userID}`);    
   }
 
   const deleteThis = (userID) => {
@@ -136,18 +142,43 @@ const Modal = forwardRef((props,ref) => {
                   </table>
                 </div>
                 </div>
-                <div class="modal-footer">                    
-                    {/* {
-                      ((props.whichTab=='payment')?<button type="button" class="btn btn-danger" data-dismiss="modal" id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>
-                      :null)
-                    }        */}
-                    <h1>{props.whichTab}</h1>
+                <div class="modal-footer">
+                    {
+                      (props.paymentstatus == 'NotDone'?(isAdmin=='ADMIN'?<>
+                      <p className="justify-content-left"><mark>If details are valid than click on Verify else Delete.</mark></p>
+                      <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                      onClick={() => {makethisUserVerify(props.forId)}}>Verify</button>
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                      id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>
+                      </>:null):null)
+                    }
+                    {
+                      (props.paymentstatus == 'StillDone'?<>
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                      id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>
+                      </>:null)
+                    }
+                    {
+                      ((props.paymentstatus == 'Done')?<>
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                      id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>  
+                      <button type="button" class="btn btn-outline-primary" data-toggle="modal" 
+                      data-target="#exampleModalCenteredScrollable"
+                      onClick={()=>openModal2}>ID</button>
+                      </>:null)
+                    }
+                    {
+                      ((props.paymentstatus == 'Done'&&isAdmin=='ADMIN')?<>
+                      <button type="button" class="btn btn-outline-primary" data-dismiss="modal" id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button>
+                      </>:null)
+                    }
+                    
                     {/*
                     {
                       (props.tab=='active')?(<><button type="button" class="btn btn-secondary" data-dismiss="modal" id={props.forId} onClick={()=>redirect(props.forId)}>Edit</button><button type="button" class="btn btn-danger" data-dismiss="modal" id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenteredScrollable" onClick={openModal2}>ID</button></>)
                       :null
                     } */}
-                    {(isAdmin == 'ADMIN') ? (props.membership ===  "NotVerified" ? <p className="justify-content-left"><mark>If details are valid than click on Verify else Delete.</mark></p> :null ):null}
+                    {/* {(isAdmin == 'ADMIN') ? (props.membership ===  "NotVerified" ? <p className="justify-content-left"><mark>If details are valid than click on Verify else Delete.</mark></p> :null ):null}
                     {(isAdmin == 'ADMIN')?(
                       (props.membership ===  "NotVerified")? <button type="button" class="btn btn-primary" data-dismiss="modal"
                       onClick={() => {makethisUserVerify(props.forId)}}>Verify</button> : <button type="button" class="btn btn-secondary" data-dismiss="modal"
@@ -157,7 +188,7 @@ const Modal = forwardRef((props,ref) => {
                     id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>:null}
                     <button type="button" class="btn btn-primary" data-toggle="modal" 
                         data-target="#exampleModalCenteredScrollable"
-                    onClick={openModal2}>ID</button>
+                    onClick={openModal2}>ID</button> */}
 
                   <Modal_ID ref={modal2Ref} memberID={props.forId} membername={props.fname}
                     memberaddress={props.add} membercontactNo={props.mob} memberlastname={props.lname}
