@@ -9,6 +9,7 @@ import { Login } from './components/Auth/Login';
 import { Register } from './components/Auth/Register'
 import {Pending_Users } from './components/navbar_components/pending_users'
 import { AddManually } from './components/AddManually';
+import { Timetable } from './components/navbar_components/Timetable';
 
 class App extends Component {    
     render(){
@@ -22,7 +23,8 @@ class App extends Component {
                 <Route exact path="/total_users"><Admin_panel/></Route>
                 <Route exact path="/active_members"><Active_members/></Route>
                 <Route exact path="/paymentpending"><NotPayment/></Route>
-                <Route exact path="/addmanually"><AddManually/></Route>                
+                <Route exact path="/addmanually"><AddManually/></Route>
+                <Route exact path="/timetable"><Timetable/></Route>                
             </>
         );
     }

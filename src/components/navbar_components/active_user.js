@@ -14,6 +14,36 @@ export const Active_user = () => {
         history.push('/');
     }
 
+    const [user,setUser] = useState({// *
+        firstname : '',
+        middlename: '',
+        lastname: '',
+        nameofinstitute: '',
+        nameofDepartment: '',
+        studentIDEmployeeID: '',
+        residentialAddress: '',
+        city: '',
+        zip: '',
+        telephone: '',
+        mobileno: '',
+        email: '',
+        dob:'',
+        gender:'',
+        emergencyContactPerson: '',
+        relation: '',
+        telephone1: '',
+        mobileNo1: '',
+        email1: ''
+     });
+  
+     let name,value;
+      // handling the values that are changed
+     const handleinputs = (e) =>{
+        name = e.target.name;
+        value = e.target.value;
+        setUser({...user,[name]:value})
+      }
+
     useEffect(() => {        
         axios.get('/users/getmember', {                    
         }).then((res)=>{        

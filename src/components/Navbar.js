@@ -68,11 +68,11 @@ export const Navbar = () => {
                         </li>
                         
                         <li className={clsx({'nav-item' : true,'active': location.pathname === '/admin'})} id="li3">
-                            <NavLink  data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-home-8-line"></i><span>Pending Members</span></NavLink>
+                            <NavLink  data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-group-line"></i><span>Pending Members</span></NavLink>
                         </li>
 
                         <li className={clsx({'nav-item' : true,'active': location.pathname === '/paymentpending'})} id="li5">
-                            <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-home-8-line"></i><span>Payment Remaining</span></NavLink>
+                            <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/paymentpending"><i className="ri-group-line"></i><span>Payment Remaining</span></NavLink>
                         </li>
 
                         <li className={clsx({'nav-item' : true,'active': location.pathname === '/active_members'})} id="li2">
@@ -81,7 +81,13 @@ export const Navbar = () => {
                         
                         {
                             ((!isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
-                                <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-home-8-line"></i><span>Total Users</span></NavLink>
+                                <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-user-3-line"></i><span>Total Users</span></NavLink>
+                            </li>:null)
+                        }
+
+                        {
+                            ((!isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/timetable'})} id="li4">
+                                <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/timetable"><i className="ri-timer-fill"></i><span>Time Table</span></NavLink>
                             </li>:null)
                         }
                         
@@ -103,7 +109,7 @@ export const Navbar = () => {
                         </div>
                         <nav className="navbar navbar-expand-lg navbar-light p-0">
                                     <div className="navbar-left">
-                                        <h3 className="ml-3" ><strong> University Fitess Center</strong></h3>                                
+                                        <h3 className="ml-3" ><strong> University Fitness Center</strong></h3>                                
                                     </div>
                                     
                                     
