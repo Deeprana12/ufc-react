@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from './UpdateForm';
 import { Navbar } from '../Navbar';
 import ReactPaginate from 'react-paginate';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import {RotateLoader} from 'react-spinners'
 
 export const Active_members = () => {
@@ -17,7 +17,7 @@ export const Active_members = () => {
     `;
 
     const addmanually = () => {
-        
+        history.push('/addmanually')
     }
      
     const history = useHistory()
@@ -121,8 +121,8 @@ export const Active_members = () => {
                                         </div>
                                         <div class="col-sm-12 col-md-6">
                                             <div class="user-list-files d-flex float-right">
-                                                <button class="btn btn-outline-primary" onClick={()=>addmanually}>
-                                                ADD MEMBER
+                                                <button class="btn btn-outline-primary" onClick={addmanually}>
+                                                + ADD MEMBER
                                                 </button>                                                
                                             </div>
                                         </div>

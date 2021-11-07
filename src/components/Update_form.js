@@ -69,18 +69,19 @@ export const Update_form = () => {
       value = e.target.value;
       setUser({...user,[name]:value})
     }
-    
-    const [fileInputState, setFileInputState] = useState('')
+        
     const [fetchImg, setFetchImg] = useState('')
     
     // for fetching data
-    useEffect(() => {         
+    useEffect(() => { 
+        
         if(localStorage.getItem('user') === null || localStorage.getItem('user') == 'null'){
             history.push('/');
         }
         axios.get(`/users/fetchmember/${id}`, {                    
         }).then((res)=>{
-          setLoading(true)                                                
+          setLoading(true)
+          console.log(res)                                      
           setUser({    
               _id : res.data._id,
             firstname  : res.data.firstname ,
@@ -138,28 +139,17 @@ export const Update_form = () => {
     const submitForm = async (e) =>{            
         e.preventDefault();        
         uploadImage(previewSource) 
+        alert(base64Image)
         const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;
-        if(base64Image==null){
-            await axios.patch(`/users/updatemember/${id}`,{
-                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1
-            }).then((res)=>{
-                    console.log(res);
-                    alert('done');
-            }).catch((err) => { 
-                    alert('err');
-                    console.log(err); 
-            });
-        }else{
-            await axios.patch(`/users/updatemember/${id}`,{
-                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
-            }).then((res)=>{
-                    console.log(res);
-                    alert('done');
-            }).catch((err) => {
-                    alert('err');
-                    console.log(err); 
-            });            
-        }
+        await axios.patch(`/users/updatemember/${id}`,{
+            firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
+        }).then((res)=>{
+                console.log(res);
+                alert('done');
+        }).catch((err) => {
+                alert('err');
+                console.log(err); 
+        });
    }
 
     return (
