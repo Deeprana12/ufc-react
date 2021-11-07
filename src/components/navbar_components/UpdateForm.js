@@ -164,7 +164,7 @@ const Modal = forwardRef((props,ref) => {
                       id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>  
                       <button type="button" class="btn btn-outline-primary" data-toggle="modal" 
                       data-target="#exampleModalCenteredScrollable"
-                      onClick={()=>openModal2}>ID</button>
+                      onClick={openModal2}>ID</button>
                       </>:null)
                     }
                     {
