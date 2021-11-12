@@ -45,39 +45,41 @@ const Id_card = forwardRef((props,ref) => {
                         </div>
                         <div class="modal-body" id="full-modal" ref2={componentRef}>
                             <div>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <div>
-                                            <img src={charu_logo} className="card-img mb-0" style={{width:"100%",height:"70px"}} alt="#"/>
-                                                <h5 style={{"textAlign":"center"}}><b>UNIVERSITY FITNESS CENTER</b></h5>
+                            <table id="user-list-table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
+                        <div class="align-items-center mb-0" style={{display:"flex","flex-direction":"column"}}>
+                            <img src={charu_logo} className="card-img mb-0" style={{width:"100%",height:"70px"}} alt="#"/>
+                                <h5><b>UNIVERSITY FITNESS CENTER</b></h5>
+                        </div>
+                        <hr style={{width:"80%"}}/>
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="row no-gutters flex-row-reverse">
+                                        <div class="col-md-5 pr-2">
+                                            <img src="../Asserts/images/page-img/09.jpg" class="card-img rounded-circle ml-3" alt="#"/>
                                         </div>
-                                    </thead>                                
-                                    <tbody>
-                                        <div className="row m-3">
-                                            <div class="col-md-5 pr-2">
-                                                <img src="../Asserts/images/page-img/09.jpg" class="card-img rounded-circle ml-3"
-                                                    style={{width:"100%",height:"100%"}} alt="#"/>
-                                            </div>
-                                            <div className="col-lg-7">
-                                                <tr><strong>Name of Member :&nbsp;&nbsp;</strong> <u>{props.membername}</u></tr>
-                                                <tr><strong>Membership No :  &nbsp;&nbsp;</strong> <u>{1+2}</u></tr>
-                                                <tr><strong>Local Address :    &nbsp;&nbsp;</strong> <u>{props.memberaddress}</u></tr>
-                                                <tr><strong>Contact No:  &nbsp;&nbsp;</strong> <u>{props.membercontactNo}</u></tr>
-                                                <tr><strong>Blood Group:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
-                                                <tr><strong>Batch time/Time slot:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
-                                                <tr></tr>
-                                                <tr></tr>
-                                            </div>
-                                            <p></p>
-                                            <p></p>
-                                            <p></p>
-                                            <div style={{display:"flex",flexDirection:"row",justifyContent:"space-around"}}>
-                                                <b><strong><p>UFC In-charge</p></strong></b>
-                                                <b><strong><p style={{textAlign:"right"}}>Member Signature</p></strong></b>
+                                            <div class="col-md-7">
+                                            <div className="table-responsive">                                      
+                                            <tr><strong>Name of Member :&nbsp;&nbsp;</strong> <u>{props.membername}</u></tr>
+                                            <tr><strong>Membership No :  &nbsp;&nbsp;</strong> <u>{1+2}</u></tr>
+                                            <tr><strong>Local Address :    &nbsp;&nbsp;</strong> <u>{props.memberaddress}</u></tr>
+                                            <tr><strong>Contact No:  &nbsp;&nbsp;</strong> <u>{props.membercontactNo}</u></tr>
+                                            <tr><strong>Blood Group:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
+                                            <tr><strong>Batch time/Time slot:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
+                                            <tr></tr>
+                                            <tr></tr>
                                             </div>
                                         </div>
-                                    </tbody>
-                                </table>
+                                    </div>
+                                        <p></p>
+                                        <p></p>          
+                                        <p></p>                  
+                                    <div style={{display:"flex",flexDirection:"row",justifyContent:"space-around"}}>
+                                        <b><strong><p>UFC In-charge</p></strong></b>
+                                        <b><strong><p style={{textAlign:"right"}}>Member Signature</p></strong></b>
+                                    </div>
+                                </div>
+                            </div>                                                                                                                                        
+                        </table>
                             </div>
                             <div className="justify-content-center">
                                 <table className="table table-bordered">

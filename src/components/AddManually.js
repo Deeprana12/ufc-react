@@ -70,8 +70,7 @@ export const AddManually = () => {
       setUser({...user,[name]:value})
     }
     
-    const [fileInputState, setFileInputState] = useState('')
-    const [fetchImg, setFetchImg] = useState('')       
+    const [fileInputState, setFileInputState] = useState('')    
     
     const [previewSource, setPreviewSource] = useState('')
 
@@ -153,7 +152,7 @@ export const AddManually = () => {
                                         <div className="col-md-6 mb-3"><label for="nameofinstitute">Name of institute</label>
                                             <select
                                                 id="validationCustom04" required="required" className="form-control" onChange={changeSelectOptionHandler}>
-                                                {/* <option selected="selected" disabled="disabled" value="">Choose...</option> */}
+                                                <option selected="selected" disabled="disabled" value="">Choose...</option>
                                                 <option value="cspit" selected={institute === "cspit"}>CSPIT</option>
                                                 <option value="depstar" selected={institute === "depstar"}>DEPSTAR</option>
                                                 <option value="rpcp" selected={institute === "rpcp"}>RPCP</option>
@@ -334,7 +333,7 @@ export const AddManually = () => {
 
                                         <div class="form-group">
                                             <label for="exampleFormControlFile1">Upload Image</label>
-                                            <input type="file" class="form-control-file" id="pimg" name="pimg"                                             
+                                            <input type="file" class="form-control-file" id="pimg" name="pimg"
                                             onChange={handleFileInputChange}
                                         />                                      
                                         

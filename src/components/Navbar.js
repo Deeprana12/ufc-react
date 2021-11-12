@@ -22,17 +22,15 @@ export const Navbar = () => {
     const [role, setRole] = useState('')
     const location = useLocation();
 
-    useEffect(() => {
-        if(localStorage.getItem('role')=='ADMIN'){
-            setIsAdmin(true)
-        }         
+    useEffect(() => {        
         let obj = (localStorage.getItem('dataKey'))
-        let i2 = JSON.parse(obj)
-        console.log(i2)       
+        let i2 = JSON.parse(obj)        
         setFirst(i2.firstname)
         setLast(i2.lastname)
         setRole(i2.role)
-        console.log(location.pathname);
+        if(role==='ADMIN'){            
+            setIsAdmin(true)
+        }        
     }, [])
 
     const logitOut = () => {        
@@ -60,7 +58,8 @@ export const Navbar = () => {
             </div>
 
             <div id="sidebar-scrollbar" data-scrollbar="true" tabIndex="-1" style={{overflow: "hidden", outline: "none"}}><div className="scroll-content">
-                <nav className="iq-sidebar-menu">
+                <nav className="iq-sidebar-menu">        
+
                     <ul id="iq-sidebar-toggle" className="iq-menu nav nav-tabs nav-fill">
                         <li className="iq-menu-title"><i className="ri-subtract-line"></i><span>Dashboard</span></li>
                         <li className={clsx({'nav-item' : true, 'active': location.pathname === '/dashboard' })} id="li1">
@@ -80,13 +79,13 @@ export const Navbar = () => {
                         </li> 
                         
                         {
-                            ((!isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
+                            ((isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
                                 <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-user-3-line"></i><span>Total Users</span></NavLink>
                             </li>:null)
                         }
 
                         {
-                            ((!isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/timetable'})} id="li4">
+                            ((isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/timetable'})} id="li4">
                                 <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/timetable"><i className="ri-timer-fill"></i><span>Time Table</span></NavLink>
                             </li>:null)
                         }
@@ -114,6 +113,13 @@ export const Navbar = () => {
                                     
                                     
                                     <div className="collapse navbar-collapse" id="navbarSupportedContent">                
+                                    </div>
+
+                                    <div class="iq-menu-bt align-self-center">
+                                        <div class="wrapper-menu">
+                                            <div class="main-circle"><i class="ri-arrow-left-s-line"></i></div>
+                                            <div class="hover-circle"><i class="ri-arrow-right-s-line"></i></div>
+                                        </div>
                                     </div>
                                     
                                     <ul className="navbar-list">
