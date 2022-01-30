@@ -62,7 +62,7 @@ const Id_card = forwardRef((props,ref) => {
                                             <tr><strong>Name of Member :&nbsp;&nbsp;</strong> <u>{props.membername}</u></tr>
                                             <tr><strong>Membership No :  &nbsp;&nbsp;</strong> <u>{1+2}</u></tr>
                                             <tr><strong>Local Address :    &nbsp;&nbsp;</strong> <u>{props.memberaddress}</u></tr>
-                                            <tr><strong>Contact No:  &nbsp;&nbsp;</strong> <u>{props.membercontactNo}</u></tr>
+                                            <tr ><strong>Contact No:  &nbsp;&nbsp;</strong> <u>{props.membercontactNo}</u></tr>
                                             <tr><strong>Blood Group:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
                                             <tr><strong>Batch time/Time slot:   &nbsp;&nbsp;</strong> <u>{props.memberlastname}</u></tr>
                                             <tr></tr>

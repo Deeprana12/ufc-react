@@ -28,15 +28,18 @@ export const Navbar = () => {
         setFirst(i2.firstname)
         setLast(i2.lastname)
         setRole(i2.role)
-        if(role==='ADMIN'){            
+        console.log(i2.role=='ADMIN')
+        if(i2.role=='ADMIN'){            
             setIsAdmin(true)
         }        
+        console.log(isAdmin)
     }, [])
 
     const logitOut = () => {        
         localStorage.setItem('user',null)
         localStorage.setItem('dataKey',null)
-        history.push('/');                  
+        localStorage.setItem('notify',null)
+        history.push('/');                   
     }   
    
     return (
@@ -79,13 +82,13 @@ export const Navbar = () => {
                         </li> 
                         
                         {
-                            ((isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
+                            ((isAdmin==true)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/total_users'})} id="li4">
                                 <NavLink data-toggle="tab" aria-selected="false" id="li4a" to="/total_users"><i className="ri-user-3-line"></i><span>Total Users</span></NavLink>
                             </li>:null)
                         }
 
                         {
-                            ((isAdmin)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/timetable'})} id="li4">
+                            ((isAdmin==true)?<li className={clsx({'nav-item' : true,'active': location.pathname === '/timetable'})} id="li4">
                                 <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/timetable"><i className="ri-timer-fill"></i><span>Time Table</span></NavLink>
                             </li>:null)
                         }

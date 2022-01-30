@@ -71,10 +71,11 @@ export const Login = () => {
                     'username' : res.data.userData,
                     'role':res.data.role,
                     'firstname' : res.data.fname,
-                    'lastname':res.data.lname 
+                    'lastname':res.data.lname                    
                 }
                 localStorage.setItem('dataKey', JSON.stringify(allData));
                 localStorage.setItem('user', res.data.msg);
+                localStorage.setItem('notify', 'done');
                 history.push('/dashboard');
             }
             else notifyError("Login failed")

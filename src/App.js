@@ -10,6 +10,7 @@ import { Register } from './components/Auth/Register'
 import { Pending_Users } from './components/navbar_components/pending_users'
 import { AddManually } from './components/AddManually';
 import { Timetable } from './components/navbar_components/Timetable';
+import { Currentbatch } from './components/navbar_components/Currentbatch';
 
 class App extends Component {    
     render(){
@@ -24,7 +25,8 @@ class App extends Component {
                 <Route exact path="/active_members"><Active_members/></Route>
                 <Route exact path="/paymentpending"><NotPayment/></Route>
                 <Route exact path="/addmanually"><AddManually/></Route>
-                <Route exact path="/timetable"><Timetable/></Route>                
+                <Route exact path="/timetable"><Timetable/></Route>
+                <Route exact path="/currentbatch"><Currentbatch/></Route>
             </>
         );
     }

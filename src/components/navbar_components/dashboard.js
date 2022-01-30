@@ -6,7 +6,23 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import  { useHistory } from 'react-router-dom'
 import {RotateLoader} from 'react-spinners'
+import {Doughnut} from 'react-chartjs-2';
 export const Dashboard = () => {    
+    
+    const [pendingMember, setpendingMember] = useState('')
+    const [paymentpending, setPaymentpending] = useState('')
+    const [verificationpending, setVerificationpending] = useState('')
+    const [members, setMembers] = useState('')
+    
+    const data = {
+        labels:['Verified','Pending','Active'],
+        datasets:[{
+            data:[verificationpending,paymentpending,members],
+            backgroundColor:[
+                "#ffcd56","#ff6384","#36a2eb"
+            ]
+        }]    
+    }
 
     const [loading, setLoading] = useState(false)
     
@@ -31,17 +47,20 @@ export const Dashboard = () => {
     });
 
     const [users, setUsers] = useState('')
-    const [members, setMembers] = useState('')
-    const [pendingMember, setpendingMember] = useState('')
-    const [paymentpending, setPaymentpending] = useState('')
-    const [verificationpending, setVerificationpending] = useState('')
 
     useEffect(() => {       
         if(localStorage.getItem('user')!='done'){
             history.push('/');
             notifyError("You are not Authorized for this page!!")
         }else{
-            notifySuccess("Welcome Admin!!")
+            if(localStorage.getItem('notify')=="once_done"){
+            }else{
+                const myTimeout = setTimeout(maketostify, 3000);
+                function maketostify(){
+                    notifySuccess("Welcome Admin!!")
+                    localStorage.setItem('notify','once_done');
+                }
+            }         
         }
         axios.get('/users/getuserscount', {
         }).then((res)=>{
@@ -192,11 +211,12 @@ export const Dashboard = () => {
                                             </div>
                                         </div>
                                         <div className="iq-card-body" style={{position: "relative"}}>
-                                            <div id="progress-chart-3" style={{"minHeight": "266.537px"}}><div id="apexcharts905w1md3i" className="apexcharts-canvas apexcharts905w1md3i light" style={{"width": "380px", "height": "266.537px"}}>
-
-                                            
-
-                                            <div className="apexcharts-legend"></div></div></div>
+                                            <div id="progress-chart-3" style={{"minHeight": "300px"}}>
+                                                <div id="apexcharts905w1md3i" className='d-flex align-items-center justify-content-between text-center' 
+                                                style={{"margin":"0 auto","width": "320px", "height": "300px"}}>                                            
+                                                    <Doughnut data={data}/>
+                                                </div>
+                                            </div>
                                             <div className="d-flex align-items-center justify-content-between mt-3 text-center">
                                                 <div className="title position-relative">
                                                     <h5>Total</h5>
@@ -208,11 +228,11 @@ export const Dashboard = () => {
                                                 </div>
                                                 <div className="title">
                                                     <h5>Verified</h5>
-                                                    <p className="mb-0 ml-2 mr-2">{members - pendingMember}</p>
+                                                    <p className="mb-0 ml-2 mr-2">{verificationpending}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="resize-triggers"><div className="expand-trigger"><div style={{"width": "421px", "height": "373px"}}></div></div><div className="contract-trigger"></div></div>
+                                         <div className="resize-triggers"><div className="expand-trigger"><div style={{"width": "421px", "height": "373px"}}></div></div><div className="contract-trigger"></div></div>
                                     </div>
                                     <ToastContainer
                                         position="top-right"

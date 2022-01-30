@@ -10,7 +10,7 @@ export const NotPayment = () => {
     
     const [loading, setLoading] = useState(false)
     
-    const override = ` 
+    const override = `  
         top: 250px;
         display: block;
         margin: 0 auto;        

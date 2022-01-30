@@ -70,7 +70,7 @@ export const AddManually = () => {
       setUser({...user,[name]:value})
     }
     
-    const [fileInputState, setFileInputState] = useState('')    
+    const [fileInputState, setFileInputState] = useState('')        
     
     const [previewSource, setPreviewSource] = useState('')
 
