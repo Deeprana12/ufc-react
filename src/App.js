@@ -11,8 +11,9 @@ import { Pending_Users } from './components/navbar_components/pending_users'
 import { AddManually } from './components/AddManually';
 import { Timetable } from './components/navbar_components/Timetable';
 import { Currentbatch } from './components/navbar_components/Currentbatch';
+import { Currentbatch1 } from './components/navbar_components/Currentbatch1';
 
-class App extends Component {    
+class App extends Component {
     render(){
         return (
             <>
@@ -26,7 +27,8 @@ class App extends Component {
                 <Route exact path="/paymentpending"><NotPayment/></Route>
                 <Route exact path="/addmanually"><AddManually/></Route>
                 <Route exact path="/timetable"><Timetable/></Route>
-                <Route exact path="/currentbatch"><Currentbatch/></Route>
+                <Route exact path="/canteen_currentbatch"><Currentbatch/></Route>
+                <Route exact path="/physio_currentbatch"><Currentbatch1/></Route>
             </>
         );
     }

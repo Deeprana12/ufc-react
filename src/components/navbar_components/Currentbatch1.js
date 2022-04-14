@@ -8,7 +8,7 @@ import  { useHistory } from 'react-router-dom'
 import {RotateLoader} from 'react-spinners'
 import {Doughnut} from 'react-chartjs-2';
 
-export const Currentbatch = () => {    
+export const Currentbatch1 = () => {    
     
     const [loading, setLoading] = useState(false)
     const [l1,setL1] = useState(false);
@@ -63,7 +63,7 @@ export const Currentbatch = () => {
         if(flag == false){
             getonePunchmembers();
         }
-        axios.get('/users/getduemembers', {
+        axios.get('/users/b2/getduemembers', {
         }).then((res)=>{
             setUser(res.data);           
             setL1(true);
@@ -73,7 +73,7 @@ export const Currentbatch = () => {
     }
 
     function getonePunchmembers(){
-        axios.get('/users/getcurrentbatch', {
+        axios.get('/users/b2/getcurrentbatch', {
         }).then((res)=>{
             console.log(res);            
             setOnepunch(res.data);
@@ -95,7 +95,7 @@ export const Currentbatch = () => {
 
     function storeInmongo(fdata){
         const data = JSON.stringify(fdata);
-        axios.post('/users/batch1', {
+        axios.post('/users/b2/batch1', {
             data
         }).then((res)=>{
             if(res){
@@ -110,7 +110,7 @@ export const Currentbatch = () => {
 
     function gotoRegular(fdata){
         const data = JSON.stringify(fdata);
-        axios.post('/users/savetoregular', {
+        axios.post('/users/b2/savetoregular', {
             data
         }).then((res)=>{
             refreshAll();
@@ -125,7 +125,7 @@ export const Currentbatch = () => {
 
     function gotoDiff(fdata){
         const data = JSON.stringify(fdata);
-        axios.post('/users/savetodiff', {
+        axios.post('/users/b2/savetodiff', {
             data
         }).then((res)=>{
             refreshAll();
@@ -138,7 +138,7 @@ export const Currentbatch = () => {
     }
 
     function gotoDelete(id){
-        axios.post('/users/deletethis', {
+        axios.post('/users/b2/deletethis', {
             id
         }).then((res)=>{
             refreshAll();
@@ -151,7 +151,7 @@ export const Currentbatch = () => {
     }
 
     function getdiffBatch() {
-        axios.get('/users/getdiffBatch', {
+        axios.get('/users/b2/getdiffBatch', {
         }).then((res)=>{
             setDiff(res.data);            
         }).catch((err) => {
@@ -160,7 +160,7 @@ export const Currentbatch = () => {
     }
 
     function getRegular() {
-        axios.get('/users/getregular', {
+        axios.get('/users/b2/getregular', {
         }).then((res)=>{
             setRegular(res.data);            
         }).catch((err) => {
@@ -383,9 +383,9 @@ export const Currentbatch = () => {
             <div className="wrapper">
             <Navbar/>
                 <div id="content-page" className="content-page">
-                    <div className="container-fluid">                        
+                    <div className="container-fluid">
                         <button type="button" class="btn btn-outline-dark center mb-6 btn-block"
-                        onClick={()=>refreshAllwithfun()}>Refresh</button>                        
+                        onClick={()=>refreshAllwithfun()}>Refresh</button>
                         <div className="row">                     
                         <div class="col-md-6 col-lg-3">
                             <div class="iq-card iq-card-block iq-card-stretch iq-card-height iq-border-box iq-border-box-1 text-success">

@@ -68,6 +68,13 @@ export const Navbar = () => {
                         <li className={clsx({'nav-item' : true, 'active': location.pathname === '/dashboard' })} id="li1">
                             <NavLink data-toggle="tab" aria-selected="true" id="li1a" to="/dashboard"><i className="ri-home-4-line"></i><span>Dashboard</span></NavLink>
                         </li>
+                        <li className={clsx({'nav-item' : true,'active': location.pathname === '/canteen_currentbatch'})} id="li6">
+                            <NavLink  data-toggle="tab" aria-selected="false" id="li6a" to="/canteen_currentbatch"><i className="ri-user-3-line"></i><span>Canteen batch</span></NavLink>
+                        </li> 
+
+                        <li className={clsx({'nav-item' : true,'active': location.pathname === '/physio_currentbatch'})} id="li7">
+                            <NavLink  data-toggle="tab" aria-selected="false" id="li7a" to="/physio_currentbatch"><i className="ri-user-3-line"></i><span>Physio batch</span></NavLink>
+                        </li>                         
                         
                         <li className={clsx({'nav-item' : true,'active': location.pathname === '/admin'})} id="li3">
                             <NavLink  data-toggle="tab" aria-selected="false" id="li3a" to="/admin"><i className="ri-group-line"></i><span>Pending Members</span></NavLink>
@@ -92,6 +99,7 @@ export const Navbar = () => {
                                 <NavLink data-toggle="tab" aria-selected="false" id="li5a" to="/timetable"><i className="ri-timer-fill"></i><span>Time Table</span></NavLink>
                             </li>:null)
                         }
+
                         
                     </ul>
                 </nav>

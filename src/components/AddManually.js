@@ -16,10 +16,12 @@ export const AddManually = () => {
     `;
 
     const [selected, setSelected] = React.useState("");
+    const [designation, setDesignation] = React.useState("");
 
     const changeSelectOptionHandler = (event) => {
         setSelected(event.target.value);
         setInstitute(event.target.value);
+        setDesignation(event.target.value);
     };
 
     const Cspit = ["BTECH(CE)","BTECH(CL)","BTECH(CS)","BTECH(EC)","BTECH(EE)","BTECH(IT)","BTECH(ME)","DRCE","DRCL","DREC","DREE","DRME","MTECH(AMT)","MTECH(CE)","MTECH(CL)","MTECH(CSE)","MTECH(EC)","MTECH(EE)","MTECH(EVD)","MTECH(ICT)","MTECH(IT)","MTECH(ME)","MTECH(PE)","MTECH(TE)","MTM","PGDCS"];
@@ -97,10 +99,10 @@ export const AddManually = () => {
     const submitForm = async (e) =>{            
         e.preventDefault();
         uploadImage(previewSource) 
-        const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1} = user;        
+        const {firstname,middlename,lastname,nameofinstitute,nameofDepartment,studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,emergencyContactPerson,relation,telephone1,mobileNo1,email1,blood,designation} = user;        
         if(base64Image==null){
             await axios.post(`/users/member`,{
-                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1
+                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,blood,designation
             }).then((res)=>{                      
                     if(res.data.err=='true'){
                         alert('already Member')
@@ -112,7 +114,7 @@ export const AddManually = () => {
             });
         }else{
             await axios.post(`/users/member`,{
-                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,pimg:base64Image
+                firstname,middlename,lastname,nameofinstitute : institute,nameofDepartment : department, studentIDEmployeeID,residentialAddress,city,zip,telephone,mobileno,email,dob,gender:gender,emergencyContactPerson,relation,telephone1,mobileNo1,email1,blood,designation,pimg:base64Image
             }).then((res)=>{      
                     if(res.data.err='true'){
                         alert('already Member')
@@ -168,6 +170,7 @@ export const AddManually = () => {
                                         </div>
 
                                         <div className="col-md-6 mb-3"><label for="nameofDepartment">Name of department</label>
+                                            <option selected="selected" disabled="disabled" value="">Choose...</option>
                                             <select
                                                 id="validationCustom05" required="required"  className="form-control" onChange={(e) => {setDepartment(e.target.value)}}>
                                                 {
@@ -329,14 +332,28 @@ export const AddManually = () => {
                                             id="email1" required="required" onChange={handleinputs} value={user.email1} className="form-control" name="email1"/>
                                             <div className="invalid-feedback"> Please provide a valid Email address.</div>
                                         </div>
+                                        <div className="col-md-6 mb-3"><label for="blood">Blood group</label><input type="text"
+                                            id="blood" required="required" onChange={handleinputs} value={user.blood} className="form-control" name="blood"/>
+                                            <div className="invalid-feedback"> Please provide a valid address.</div>
+                                        </div>
+                                            
+                                        <div className="col-md-6 mb-3"><label for="nameofinstitute">Designation</label>
+                                            <select
+                                                id="validationCustom05" required="required" className="form-control" onChange={changeSelectOptionHandler}>
+                                                <option selected="selected" disabled="disabled" value="">Choose...</option>
+                                                <option value="student" selected={designation === "student"}>Student</option>                                             <option value="faculty" selected={designation === "faculty"}>Faculty</option>          
+                                                <option value="staff" selected={designation === "staff"}>Staff</option>          
+                                            </select>
+                                            <div className="invalid-feedback"> Please select a valid Designation.</div>
+                                        </div>
+
                                         </div>
 
                                         <div class="form-group">
                                             <label for="exampleFormControlFile1">Upload Image</label>
                                             <input type="file" class="form-control-file" id="pimg" name="pimg"
                                             onChange={handleFileInputChange}
-                                        />                                      
-                                        
+                                        />                                                                                                                      
                                         {previewSource && (
                                             <>
                                                 <div style={{"margin-top":"20px"}}>

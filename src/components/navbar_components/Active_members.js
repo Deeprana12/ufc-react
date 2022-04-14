@@ -171,7 +171,7 @@ export const Active_members = () => {
                                         </div>                                    
                                     </div>
                                 </div>
-                            :<RotateLoader size={20} color='#9d7af3' css={override}  loading/>}         
+                            :<RotateLoader size={20} color='#9d7af3' css={override}  loading />}         
                             </div>
                         </div>
                     </div>                                            
