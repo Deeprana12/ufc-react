@@ -75,7 +75,7 @@ export const Currentbatch = () => {
     function getonePunchmembers(){
         axios.get('/users/getcurrentbatch', {
         }).then((res)=>{
-            console.log(res);            
+            // console.log(resj);            
             setOnepunch(res.data);
             setL2(true);
             setLoading(true);            
@@ -84,19 +84,36 @@ export const Currentbatch = () => {
         });
     }    
     function fun1(){        
-        fetch('https://jsonplaceholder.typicode.com/todos/1')
-        .then(response => response.json())
-        .then(data => storeInmongo(data));    
+        axios.get('/SwimAPI/get-users-data?key=4FZaNcfyAjG89NFdennu', {
+        }).then((res)=>{
+            console.log(res.data.user_entries);               
+            storeInmongo(res.data.user_entries);   
+        }).catch((err) => {
+            console.log(err); 
+        }); 
     }
 
-    // setInterval(async () => {
-    //     getonepunchmembers();
-    // },2000);
+    let theInterval;
+    const startScannig = () =>{
+        theInterval ="";       
+        theInterval =  setInterval(async () => {
+            getonePunchmembers();
+            fun1();
+        },1000);
+        console.log('start');
+    }
+
+    const stopScannig = () =>{
+        console.log('stop');
+        clearInterval(theInterval);
+    }
 
     function storeInmongo(fdata){
-        const data = JSON.stringify(fdata);
+        // const data = JSON.stringify(fdata);
+        // console.log(fdata[0])
+        const final_entry = fdata[0];
         axios.post('/users/batch1', {
-            data
+            final_entry
         }).then((res)=>{
             if(res){
                 // alert('done')
@@ -109,9 +126,8 @@ export const Currentbatch = () => {
     }
 
     function gotoRegular(fdata){
-        const data = JSON.stringify(fdata);
         axios.post('/users/savetoregular', {
-            data
+            fdata
         }).then((res)=>{
             refreshAll();
             if(res){
@@ -124,9 +140,8 @@ export const Currentbatch = () => {
     }
 
     function gotoDiff(fdata){
-        const data = JSON.stringify(fdata);
         axios.post('/users/savetodiff', {
-            data
+            fdata
         }).then((res)=>{
             refreshAll();
             if(res){
@@ -198,7 +213,7 @@ export const Currentbatch = () => {
         fun1();
     }
 
-    console.log(onepunch);
+    // console.log(onepunch);
     // Fees Pending Section
     const [searchTerm, setsearchTerm] = useState('')
     const [pageNumber, setpageNumber] = useState(0)
@@ -268,9 +283,9 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{onepunch.id}</u></tr>
-                                    <tr><strong>Punch : &nbsp;</strong> <u>{onepunch.title}</u></tr>
-                                    <tr><strong>Date : &nbsp;</strong> <br/><u>21/01/2022 - 21/02/2022</u></tr>
+                                    <tr><strong>Name :&nbsp;</strong> <u>{onepunch.user_id}</u></tr>
+                                    <tr><strong>Punch : &nbsp;</strong> <u>{onepunch.date}</u></tr>
+                                    <tr><strong>Date : &nbsp;</strong> <br/><u>{onepunch.time}</u></tr>
                                 </div>
                             </div>
                                 <button type="button" class="btn btn-primary btn-sm m-1" onClick={() => gotoRegular(onepunch)}>Accept</button>
@@ -313,9 +328,9 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{diff.firstname}</u></tr>
-                                    <tr><strong>Punch : &nbsp;</strong> <u>{diff.dueDate}</u></tr>
-                                    <tr><strong>Date : &nbsp;</strong> <br/><u>21/01/2022 - 21/02/2022</u></tr>
+                                    <tr><strong>Name :&nbsp;</strong> <u>{diff.user_id}</u></tr>
+                                    <tr><strong>Punch : &nbsp;</strong> <u>{diff.time}</u></tr>
+                                    <tr><strong>Date : &nbsp;</strong> <br/><u>{diff.date}</u></tr>
                                 </div>
                             </div>
                                 {/* <button type="button" class="btn btn-primary btn-sm m-1" onClick={() => renewFees(user._id,user.dueDate)}>Accept</button>
@@ -358,9 +373,9 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{regular.id}</u></tr>
-                                    <tr><strong>Punch : &nbsp;</strong> <u>{regular.title}</u></tr>
-                                    <tr><strong>Date : &nbsp;</strong> <br/><u>21/01/2022 - 21/02/2022</u></tr>
+                                    <tr><strong>Id :&nbsp;</strong> <u>{regular.user_id}</u></tr>
+                                    <tr><strong>Punch : &nbsp;</strong> <u>{regular.time}</u></tr>
+                                    <tr><strong>Date : &nbsp;</strong> <br/><u>{regular.date}</u></tr>
                                 </div>
                             </div>
                                 {/* <button type="button" class="btn btn-primary btn-sm m-1" onClick={() => renewFees(user._id,user.dueDate)}>Accept</button>
@@ -384,8 +399,10 @@ export const Currentbatch = () => {
             <Navbar/>
                 <div id="content-page" className="content-page">
                     <div className="container-fluid">                        
-                        <button type="button" class="btn btn-outline-dark center mb-6 btn-block"
-                        onClick={()=>refreshAllwithfun()}>Refresh</button>                        
+                        <button type="button" class="btn btn-outline-dark text-center mb-3 btn"
+                        onClick={()=>startScannig()}>Start</button>
+                        <button type="button" class="btn btn-outline-dark text-center mb-3 btn"
+                        onClick={()=>stopScannig()}>Stop</button>
                         <div className="row">                     
                         <div class="col-md-6 col-lg-3">
                             <div class="iq-card iq-card-block iq-card-stretch iq-card-height iq-border-box iq-border-box-1 text-success">
