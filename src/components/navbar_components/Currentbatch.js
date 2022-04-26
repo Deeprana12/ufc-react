@@ -83,7 +83,7 @@ export const Currentbatch = () => {
             console.log(err); 
         });
     }    
-    function fun1(){        
+    function fun1(){ 
         axios.get('/SwimAPI/get-users-data?key=4FZaNcfyAjG89NFdennu', {
         }).then((res)=>{
             console.log(res.data.user_entries);               
@@ -93,20 +93,16 @@ export const Currentbatch = () => {
         }); 
     }
 
-    let theInterval;
-    const startScannig = () =>{
-        theInterval ="";       
-        theInterval =  setInterval(async () => {
-            getonePunchmembers();
-            fun1();
-        },1000);
-        console.log('start');
-    }
+    // let theInterval;
+    // const startScannig = () =>{    
+    
+    //     console.log('start');
+    // }
 
-    const stopScannig = () =>{
-        console.log('stop');
-        clearInterval(theInterval);
-    }
+    // const stopScannig = () =>{
+    //     console.log('stop');
+    //     clearInterval(theInterval);
+    // }
 
     function storeInmongo(fdata){
         // const data = JSON.stringify(fdata);
@@ -182,14 +178,16 @@ export const Currentbatch = () => {
             console.log(err); 
         });
     }
-
+    // const [show,setShow] = useState(false);
     useEffect(() => {
-        // for 7-days deadline members        
-        getdueMembers();
-        getonePunchmembers();
-        getdiffBatch();
-        getRegular();
-        fun1();
+        const interval = setInterval(() => {
+            fun1();
+          }, 1000);
+          getdueMembers();
+            getdiffBatch();
+            getRegular();
+          return () => clearInterval(interval);
+
     },[]);
     
     // if(l1==true && l2==true && l3==true && l4==true)
@@ -239,9 +237,9 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{user.firstname}</u></tr>
-                                    <tr><strong>Punch : &nbsp;</strong> <u>{user.dueDate}</u></tr>
-                                    <tr><strong>Date : &nbsp;</strong> <br/><u>21/01/2022 - 21/02/2022</u></tr>
+                                    <tr><strong>ID :&nbsp;</strong> <u>{user.studentIDEmployeeID}</u></tr>
+                                    <tr><strong>Date: &nbsp;</strong> <u>{user.dueDate}</u></tr>
+                                    <tr><strong>Punch Time : &nbsp;</strong> <br/><u>{user.time}</u></tr>
                                 </div>
                             </div>
                                 <button type="button" class="btn btn-primary btn-sm m-1" onClick={() => renewFees(user._id,user.dueDate)}>Accept</button>
@@ -278,14 +276,15 @@ export const Currentbatch = () => {
                 <a href="#" class="list-group-item list-group-item-action">
                     <div class="card">
                         <div class="row no-gutters flex-row-reverse">
-                            <div class="col-md-5 pr-2">
-                                <img src="../Asserts/images/page-img/09.jpg" class="card-img rounded-circle ml-3" alt="#"/>
+                            <div class="col-md-5 pr-2">            
+                                {onepunch.user_id=="19CE117"?<img src="../Asserts/images/user/01.jpg" class="card-img rounded-circle ml-3" alt="#"/>:<img src="../Asserts/images/user/02.jpg" class="card-img rounded-circle ml-3" alt="#"/>}                                                
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{onepunch.user_id}</u></tr>
-                                    <tr><strong>Punch : &nbsp;</strong> <u>{onepunch.date}</u></tr>
-                                    <tr><strong>Date : &nbsp;</strong> <br/><u>{onepunch.time}</u></tr>
+                                    <tr><strong>ID :&nbsp;</strong> <u>{onepunch.user_id}</u></tr>
+                                    <tr><strong>Date : &nbsp;</strong> <u>{onepunch.date}</u></tr>
+                                    <tr><strong>Punch Time : &nbsp;</strong> <br/><u>{onepunch.time}</u></tr>
+                                    <tr><strong>Batch Time :  &nbsp;</strong> <br/><u>{onepunch.user_id==="19CE117"?"07:00:00":"16:00:00"}</u></tr>
                                 </div>
                             </div>
                                 <button type="button" class="btn btn-primary btn-sm m-1" onClick={() => gotoRegular(onepunch)}>Accept</button>
@@ -328,7 +327,7 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Name :&nbsp;</strong> <u>{diff.user_id}</u></tr>
+                                    <tr><strong>ID :&nbsp;</strong> <u>{diff.user_id}</u></tr>
                                     <tr><strong>Punch : &nbsp;</strong> <u>{diff.time}</u></tr>
                                     <tr><strong>Date : &nbsp;</strong> <br/><u>{diff.date}</u></tr>
                                 </div>
@@ -373,7 +372,7 @@ export const Currentbatch = () => {
                             </div>
                             <div class="col-md-7">
                                 <div className="table-responsive">                                      
-                                    <tr><strong>Id :&nbsp;</strong> <u>{regular.user_id}</u></tr>
+                                    <tr><strong>ID :&nbsp;</strong> <u>{regular.user_id}</u></tr>
                                     <tr><strong>Punch : &nbsp;</strong> <u>{regular.time}</u></tr>
                                     <tr><strong>Date : &nbsp;</strong> <br/><u>{regular.date}</u></tr>
                                 </div>
@@ -399,10 +398,10 @@ export const Currentbatch = () => {
             <Navbar/>
                 <div id="content-page" className="content-page">
                     <div className="container-fluid">                        
-                        <button type="button" class="btn btn-outline-dark text-center mb-3 btn"
+                        {/* <button type="button" class="btn btn-outline-dark mb-3 btn"
                         onClick={()=>startScannig()}>Start</button>
-                        <button type="button" class="btn btn-outline-dark text-center mb-3 btn"
-                        onClick={()=>stopScannig()}>Stop</button>
+                        <button type="button" class="btn btn-outline-dark mb-3 btn"
+                        onClick={()=>stopScannig()}>Stop</button> */}
                         <div className="row">                     
                         <div class="col-md-6 col-lg-3">
                             <div class="iq-card iq-card-block iq-card-stretch iq-card-height iq-border-box iq-border-box-1 text-success">

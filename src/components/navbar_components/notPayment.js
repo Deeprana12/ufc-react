@@ -69,11 +69,11 @@ export const NotPayment = () => {
                         <td>  <button className="btn btn-outline-primary mb-3" data-toggle="modal" 
                         data-target="#exampleModalScrollable" onClick={openModal}>View</button>
                             <Modal ref={modalRef} paymentstatus={user.paymentstatus} forId={user._id} fname={user.firstname}
-                            lname={user.lastname} mname={user.middlename} noi={user.nameofInstitute}
+                            lname={user.lastname} mname={user.middlename} noi={user.nameofinstitute}
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
                             dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
-                            rele={user.relephone1} mob1={user.mobileNo1} email1={user.email1} membership={user.membership} >  
+                            rele={user.telephone1} mob1={user.mobileno1} email1={user.email1} membership={user.membership} >  
                             </Modal>
                         </td>
                     </tr> 

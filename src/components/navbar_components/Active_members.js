@@ -27,16 +27,25 @@ export const Active_members = () => {
     }
 
     const [user,setUser] = useState([]);    
+    const [morning,setMorning] = useState(0);    
+    const [evening,setEvening] = useState(0);    
     useEffect(() => {
         axios.get('/users/getactivemembers', {                    
         }).then((res)=>{
             setUser(res.data)
-            setLoading(true)
-            // console.log(res)
+            setLoading(true)            
         }).catch((err) => {
             console.log(err); 
-        });                
-    },[]);         
+        });  
+        axios.get('/users/getbatchcount', {                    
+        }).then((res)=>{
+            console.log(res);
+            setMorning(res.data.morning);
+            setEvening(res.data.evening);
+        }).catch((err) => {
+            console.log(err); 
+        });               
+    },[]);
 
     const modalRef = useRef();
 
@@ -76,7 +85,8 @@ export const Active_members = () => {
                             nod={user.nameofDepartment} sid={user.studentIDEmployeeID} add={user.residentialAddress}
                             city={user.city} zip={user.zip} tel1={user.telephone} mob={user.mobileno} email={user.email}
                             dob={user.dob} gender={user.gender} ecp={user.emergencyContactPerson} relation={user.relation}
-                            rele={user.telephone1} mob1={user.mobileno1} email1={user.email1} membership={user.membership} >  
+                            rele={user.telephone1} mob1={user.mobileno1} email1={user.email1} membership={user.membership} 
+                            batchtiming={user.batchtiming} morningbatch={morning} eveningbatch={evening}>  
                             </Modal>
                         </td>
                     </tr>

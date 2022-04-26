@@ -19,4 +19,13 @@ module.exports = function (app) {
       }
     })
   )
+  app.use(
+    createProxyMiddleware('/auth', {
+      target: 'http://localhost:3334', // API endpoint 2
+      changeOrigin: true,      
+      headers: {
+        Connection: "keep-alive"
+      }
+    })
+  )
 }

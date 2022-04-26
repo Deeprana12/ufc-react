@@ -89,6 +89,31 @@ const Modal = forwardRef((props,ref) => {
     }
   }  
 
+  const paymentdone = (userID) =>{
+    if(window.confirm("Is payment done ?") ){
+      axios.patch(`/users/confirmmembershipwithpayment/${userID}`,{}).
+       then((res)=>{
+         console.log(res)
+         if(res.data=='done'){
+           alert("Successfully done!!")
+         }else{alert('Something went wrong')}
+       })
+   }
+  }
+
+  const confirmbatch = (userID,btime) =>{
+    if(window.confirm("Are you sure ?") ){
+      axios.patch(`/users/assignbatch/${userID}`,{
+        timing : btime
+      }).
+       then((res)=>{         
+         if(res.data.err == false){
+           alert("Successfully done!!")
+         }else{alert('Something went wrong')}
+       })
+   }
+  }
+
   const open = () => {
     setDisplay(true);
   }
@@ -106,10 +131,20 @@ const Modal = forwardRef((props,ref) => {
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalScrollableTitle">Information about : <strong> {props.sid}</strong></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true"></span>
                     </button>
                 </div>
                 <div className="modal-body ">
+                <div className="col-md-6 mb-3"><label for="nameofinstitute">Assign batch timing</label>
+                    <select id="batchtiming" required="required" className="form-control" onChange={(e)=>{confirmbatch(props.forId,e.target.value)}}>
+                        <option selected="selected" disabled="disabled" value="">choose batch timing....</option>
+                        <option value="morning" selected={props.batchtiming === "morning"}>06:00 A.M to 8:00 A.M- Morning</option>
+                        <option value="evening" selected={props.batchtiming === "evening"}>08:00 P.M to 10:00 P.M- Evening</option>
+                    </select>
+                          <h5 className='m-1'>Total members in morning batch : {props.morningbatch}</h5>
+                          <h5 className='m-1'>Total members in evening batch : {props.eveningbatch}</h5>
+                    <div className="invalid-feedback"> Please select a valid Name of institute.</div>
+                </div>
                 <div className="table-responsive">
                   <table id="user-list-table" class="table table-striped table-bordered mt-4" role="grid" aria-describedby="user-list-page-info">
                     <thead>
@@ -119,7 +154,7 @@ const Modal = forwardRef((props,ref) => {
                         </tr>
                     </thead>
                     <tbody>                      
-                      <tr><td>First Name :</td> <td>{props.forId}</td></tr>
+                      <tr><td>First Name :</td> <td>{props.fname}</td></tr>
                       <tr><td>Middle Name:</td> <td>{props.mname}</td></tr>
                       <tr><td>Last Name:</td> <td>{props.lname}</td></tr>
                       <tr><td>Name of Institute:</td> <td>{props.noi}</td></tr>
@@ -137,7 +172,7 @@ const Modal = forwardRef((props,ref) => {
                       <tr><td>Relation of emergency Contact Person:</td> <td>{props.relation}</td></tr>
                       <tr><td>Telephone 2:</td> <td>{props.rele}</td></tr>
                       <tr><td>Mobile Number 2:</td> <td>{props.mob1}</td></tr>
-                      <tr><td>Email 2:</td> <td>{props.email1}</td></tr>
+                      <tr><td>Email 2:</td> <td>{props.email1}</td></tr>                      
                     </tbody>
                   </table>
                 </div>
@@ -154,6 +189,8 @@ const Modal = forwardRef((props,ref) => {
                     }
                     {
                       (props.paymentstatus == 'StillDone'?<>
+                      <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                      id={props.forId} onClick={()=>paymentdone(props.forId)}>Payment Done</button>
                       <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
                       id={props.forId} onClick={()=>deleteThis(props.forId)}>Delete</button>
                       </>:null)
